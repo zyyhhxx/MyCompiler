@@ -1,0 +1,923 @@
+-----------------------------Running Piazza Sample Test 1-----------------------------
+ERROR: 9999999999999999999999 does not fit in INT_LIT. The proper range is [−2147483648, 2147483647]
+ERROR: ID this_is_a_definitely_way_too_long_ID_no_questions_about_it_yeah_yeah_yeah_yeah_yeah_yeah_yeah is too long, truncated to this_is_a_definitely_way_too_long_ID_no_questions_about_it_yeah_yeah_yeah_yeah_y
+Comment "*** this test file contains all the legal tokens in the language, I believe" on line 0, char 0 to 74
+Comment "*** this is a comment" on line 1, char 0 to 20
+Comment "*** all keywords" on line 2, char 0 to 15
+KW_ARRAY value array on line 3, char 0 to 4
+KW_DEFUN value defun on line 4, char 0 to 4
+KW_DO value do on line 5, char 0 to 1
+KW_ELSE value else on line 6, char 0 to 3
+KW_ELSIF value elsif on line 7, char 0 to 4
+KW_END value end on line 8, char 0 to 2
+KW_FOREACH value foreach on line 9, char 0 to 6
+KW_GLOBAL value global on line 10, char 0 to 5
+KW_IF value if on line 11, char 0 to 1
+KW_IN value in on line 12, char 0 to 1
+KW_LOCAL value local on line 13, char 0 to 4
+PRINT value print on line 14, char 0 to 4
+RETURN value return on line 15, char 0 to 5
+KW_THEN value then on line 16, char 0 to 3
+KW_TUPLE value tuple on line 17, char 0 to 4
+KW_WHILE value while on line 18, char 0 to 4
+Comment "*** all operators and other punctuation" on line 19, char 0 to 38
+OP_NOTEQUA value != on line 20, char 0 to 1
+LPAR value ( on line 21, char 0
+RPAR value ) on line 22, char 0
+OP_MULT value * on line 23, char 0
+OP_PLUS value + on line 24, char 0
+OP_COMMA value , on line 25, char 0
+OP_MINUS value - on line 26, char 0
+OP_DOT value . on line 27, char 0
+OP_DOTDOT value .. on line 28, char 0 to 1
+OP_DIV value / on line 29, char 0
+SEMI value ; on line 30, char 0
+OP_LESS value < on line 31, char 0
+EXCHANGE value <-> on line 32, char 0 to 2
+OP_LESSEQUAL value <= on line 33, char 0 to 1
+ASSIGN value = on line 34, char 0
+OP_EQUAL value == on line 35, char 0 to 1
+OP_GREATER value > on line 36, char 0
+OP_GREATEREQUAL value >= on line 37, char 0 to 1
+LBRAK value [ on line 38, char 0
+RBRAK value ] on line 39, char 0
+Comment "*** numbers" on line 40, char 0 to 10
+INT_LIT value 0 on line 41, char 0
+INT_LIT value 000 on line 42, char 0 to 2
+INT_LIT value 30 on line 43, char 0 to 1
+INT_LIT value 47 on line 44, char 0 to 1
+Comment "*** too large a value" on line 45, char 0 to 20
+INT_LIT value 0 on line 46, char 0
+Comment "*** you decide what to do with this: the number is long but not large" on line 47, char 0 to 68
+INT_LIT value 0000000000000000000000 on line 48, char 0 to 21
+Comment "*** ID" on line 49, char 0 to 5
+ID value _ on line 50, char 0
+ID value a on line 51, char 0
+ID value aa on line 52, char 0 to 1
+ID value aba on line 53, char 0 to 2
+ID value abdac on line 54, char 0 to 4
+ID value _I_am_ID on line 55, char 0 to 7
+ID value _I_might_be_considered_too_long on line 56, char 0 to 30
+Comment "*** OK to produce a warning here, or not to" on line 56, char 32 to 74
+Comment "*** the ID below is DEFINITELY too long" on line 57, char 0 to 38
+ID value this_is_a_definitely_way_too_long_ID_no_questions_about_it_yeah_yeah_yeah_yeah_y on line 58, char 0 to 79
+I am done
+-----------------------------Running Piazza Sample Test 2-----------------------------
+ERROR: # is not a valid token
+ERROR: # is not a valid token
+ERROR: # is not a valid token
+ERROR: # is not a valid token
+ERROR: ! is not a valid token
+ERROR: @ is not a valid token
+ERROR: # is not a valid token
+ERROR: % is not a valid token
+ERROR: ^ is not a valid token
+ERROR: } is not a valid token
+ERROR: } is not a valid token
+ERROR: { is not a valid token
+ERROR: \ is not a valid token
+ERROR: \ is not a valid token
+ERROR: \ is not a valid token
+ERROR: ! is not a valid token
+ERROR: # is not a valid token
+ERROR: @ is not a valid token
+ERROR: ! is not a valid token
+ERROR: $ is not a valid token
+Comment "*** scanner test 2" on line 0, char 0 to 17
+Comment "*** this comment contains something that looks like legal code: a=1; b=a+b;" on line 1, char 0 to 74
+Comment "*** but it's still just a comment!!!!" on line 2, char 0 to 36
+Comment "*** this is just garbage..." on line 4, char 0 to 26
+Comment "*** end of garbage" on line 8, char 0 to 17
+I am done
+-----------------------------Running Piazza Sample Test 3-----------------------------
+Comment "*** From outline.txt file" on line 0, char 0 to 24
+Comment "*** Calculator only" on line 2, char 0 to 18
+PRINT value print on line 3, char 0 to 4
+INT_LIT value 123 on line 3, char 6 to 8
+OP_MULT value * on line 3, char 9
+INT_LIT value 231 on line 3, char 10 to 12
+OP_PLUS value + on line 3, char 13
+LPAR value ( on line 3, char 14
+INT_LIT value 123 on line 3, char 15 to 17
+OP_DIV value / on line 3, char 18
+INT_LIT value 45 on line 3, char 19 to 20
+RPAR value ) on line 3, char 21
+Comment "*** some variables and calculator" on line 4, char 0 to 32
+KW_GLOBAL value global on line 5, char 0 to 5
+ID value a on line 5, char 7
+ASSIGN value = on line 5, char 8
+INT_LIT value 10 on line 5, char 9 to 10
+PRINT value print on line 6, char 0 to 4
+ID value a on line 6, char 6
+OP_MULT value * on line 6, char 7
+ID value a on line 6, char 8
+Comment "*** a function" on line 7, char 0 to 13
+KW_DEFUN value defun on line 8, char 0 to 4
+ID value square on line 8, char 6 to 11
+LPAR value ( on line 8, char 13
+ID value x on line 8, char 14
+RPAR value ) on line 8, char 15
+RETURN value return on line 8, char 17 to 22
+ID value x on line 8, char 24
+OP_MULT value * on line 8, char 25
+ID value x on line 8, char 26
+SEMI value ; on line 8, char 27
+KW_END value end on line 8, char 29 to 31
+KW_DEFUN value defun on line 8, char 33 to 37
+KW_GLOBAL value global on line 9, char 0 to 5
+ID value b on line 9, char 7
+ASSIGN value = on line 9, char 8
+INT_LIT value 12 on line 9, char 9 to 10
+PRINT value print on line 10, char 0 to 4
+ID value square on line 10, char 6 to 11
+LPAR value ( on line 10, char 12
+ID value a on line 10, char 13
+RPAR value ) on line 10, char 14
+OP_PLUS value + on line 10, char 15
+ID value square on line 10, char 16 to 21
+LPAR value ( on line 10, char 22
+ID value b on line 10, char 23
+RPAR value ) on line 10, char 24
+Comment "*** actually, the following is also legal" on line 11, char 0 to 40
+PRINT value print on line 12, char 0 to 4
+ID value square on line 12, char 6 to 11
+ID value a on line 12, char 13
+OP_PLUS value + on line 12, char 15
+ID value square on line 12, char 17 to 22
+ID value b on line 12, char 24
+Comment "*** bubblesort? ***" on line 15, char 0 to 18
+KW_ARRAY value array on line 16, char 0 to 4
+ID value arr on line 16, char 6 to 8
+LBRAK value [ on line 16, char 9
+INT_LIT value 1 on line 16, char 10
+OP_DOTDOT value .. on line 16, char 11 to 12
+INT_LIT value 10 on line 16, char 13 to 14
+RBRAK value ] on line 16, char 15
+SEMI value ; on line 16, char 16
+ID value arr on line 17, char 0 to 2
+LBRAK value [ on line 17, char 3
+INT_LIT value 1 on line 17, char 4
+RBRAK value ] on line 17, char 5
+ASSIGN value = on line 17, char 6
+INT_LIT value 23 on line 17, char 7 to 8
+SEMI value ; on line 17, char 9
+ID value arr on line 18, char 0 to 2
+LBRAK value [ on line 18, char 3
+INT_LIT value 2 on line 18, char 4
+RBRAK value ] on line 18, char 5
+ASSIGN value = on line 18, char 6
+INT_LIT value 1 on line 18, char 7
+SEMI value ; on line 18, char 8
+ID value arr on line 19, char 0 to 2
+LBRAK value [ on line 19, char 3
+INT_LIT value 3 on line 19, char 4
+RBRAK value ] on line 19, char 5
+ASSIGN value = on line 19, char 6
+INT_LIT value 2 on line 19, char 7
+SEMI value ; on line 19, char 8
+ID value arr on line 20, char 0 to 2
+LBRAK value [ on line 20, char 3
+INT_LIT value 4 on line 20, char 4
+RBRAK value ] on line 20, char 5
+ASSIGN value = on line 20, char 6
+INT_LIT value 41 on line 20, char 7 to 8
+SEMI value ; on line 20, char 9
+ID value arr on line 21, char 0 to 2
+LBRAK value [ on line 21, char 3
+INT_LIT value 5 on line 21, char 4
+RBRAK value ] on line 21, char 5
+ASSIGN value = on line 21, char 6
+INT_LIT value 621 on line 21, char 7 to 9
+SEMI value ; on line 21, char 10
+ID value arr on line 22, char 0 to 2
+LBRAK value [ on line 22, char 3
+INT_LIT value 6 on line 22, char 4
+RBRAK value ] on line 22, char 5
+ASSIGN value = on line 22, char 6
+INT_LIT value 11 on line 22, char 7 to 8
+SEMI value ; on line 22, char 9
+ID value arr on line 23, char 0 to 2
+LBRAK value [ on line 23, char 3
+INT_LIT value 7 on line 23, char 4
+RBRAK value ] on line 23, char 5
+ASSIGN value = on line 23, char 6
+INT_LIT value 99 on line 23, char 7 to 8
+SEMI value ; on line 23, char 9
+ID value arr on line 24, char 0 to 2
+LBRAK value [ on line 24, char 3
+INT_LIT value 8 on line 24, char 4
+RBRAK value ] on line 24, char 5
+ASSIGN value = on line 24, char 6
+INT_LIT value 68 on line 24, char 7 to 8
+SEMI value ; on line 24, char 9
+ID value arr on line 25, char 0 to 2
+LBRAK value [ on line 25, char 3
+INT_LIT value 9 on line 25, char 4
+RBRAK value ] on line 25, char 5
+ASSIGN value = on line 25, char 6
+INT_LIT value 44 on line 25, char 7 to 8
+SEMI value ; on line 25, char 9
+ID value arr on line 26, char 0 to 2
+LBRAK value [ on line 26, char 3
+INT_LIT value 10 on line 26, char 4 to 5
+RBRAK value ] on line 26, char 6
+ASSIGN value = on line 26, char 7
+INT_LIT value 55 on line 26, char 8 to 9
+SEMI value ; on line 26, char 10
+ID value for on line 28, char 0 to 2
+ID value i on line 28, char 4
+ASSIGN value = on line 28, char 5
+INT_LIT value 1 on line 28, char 6
+OP_DOTDOT value .. on line 28, char 7 to 8
+INT_LIT value 9 on line 28, char 9
+KW_DO value do on line 28, char 11 to 12
+ID value for on line 29, char 2 to 4
+ID value j on line 29, char 6
+ASSIGN value = on line 29, char 7
+INT_LIT value 2 on line 29, char 8
+OP_DOTDOT value .. on line 29, char 9 to 10
+INT_LIT value 10 on line 29, char 11 to 12
+KW_DO value do on line 29, char 14 to 15
+KW_IF value if on line 30, char 5 to 6
+ID value arr on line 30, char 8 to 10
+LBRAK value [ on line 30, char 11
+ID value i on line 30, char 12
+RBRAK value ] on line 30, char 13
+OP_GREATER value > on line 30, char 14
+ID value arr on line 30, char 15 to 17
+LBRAK value [ on line 30, char 18
+ID value j on line 30, char 19
+RBRAK value ] on line 30, char 20
+KW_THEN value then on line 30, char 22 to 25
+ID value arr on line 31, char 8 to 10
+LBRAK value [ on line 31, char 11
+ID value i on line 31, char 12
+RBRAK value ] on line 31, char 13
+EXCHANGE value <-> on line 31, char 15 to 17
+ID value arr on line 31, char 19 to 21
+LBRAK value [ on line 31, char 22
+ID value j on line 31, char 23
+RBRAK value ] on line 31, char 24
+SEMI value ; on line 31, char 25
+KW_END value end on line 32, char 5 to 7
+KW_IF value if on line 32, char 9 to 10
+KW_END value end on line 33, char 2 to 4
+ID value for on line 33, char 6 to 8
+KW_END value end on line 34, char 0 to 2
+ID value for on line 34, char 4 to 6
+ID value for on line 36, char 0 to 2
+ID value i on line 36, char 4
+ASSIGN value = on line 36, char 5
+INT_LIT value 1 on line 36, char 6
+OP_DOTDOT value .. on line 36, char 7 to 8
+INT_LIT value 10 on line 36, char 9 to 10
+ID value to on line 36, char 12 to 13
+PRINT value print on line 37, char 3 to 7
+ID value arr on line 37, char 9 to 11
+LBRAK value [ on line 37, char 12
+ID value i on line 37, char 13
+RBRAK value ] on line 37, char 14
+KW_END value end on line 38, char 0 to 2
+ID value for on line 38, char 4 to 6
+Comment "*** now weird stuff... tuples" on line 38, char 12 to 40
+KW_TUPLE value tuple on line 40, char 0 to 4
+ID value t on line 40, char 6
+ASSIGN value = on line 40, char 7
+INT_LIT value 0 on line 40, char 8
+OP_COMMA value , on line 40, char 9
+INT_LIT value 1 on line 40, char 10
+OP_COMMA value , on line 40, char 11
+INT_LIT value 3 on line 40, char 12
+KW_TUPLE value tuple on line 41, char 0 to 4
+ID value tt on line 41, char 6 to 7
+ASSIGN value = on line 41, char 8
+INT_LIT value 3 on line 41, char 9
+OP_COMMA value , on line 41, char 10
+INT_LIT value 2 on line 41, char 11
+OP_COMMA value , on line 41, char 12
+INT_LIT value 1 on line 41, char 13
+KW_TUPLE value tuple on line 42, char 0 to 4
+ID value ttt on line 42, char 6 to 8
+ASSIGN value = on line 42, char 9
+INT_LIT value 0 on line 42, char 10
+OP_COMMA value , on line 42, char 11
+INT_LIT value 0 on line 42, char 12
+OP_COMMA value , on line 42, char 13
+INT_LIT value 0 on line 42, char 14
+OP_COMMA value , on line 42, char 15
+INT_LIT value 0 on line 42, char 16
+OP_COMMA value , on line 42, char 17
+INT_LIT value 0 on line 42, char 18
+OP_COMMA value , on line 42, char 19
+INT_LIT value 0 on line 42, char 20
+ID value ttt on line 44, char 0 to 2
+ASSIGN value = on line 44, char 4
+ID value t on line 44, char 6
+OP_COMMA value , on line 44, char 7
+ID value tt on line 44, char 8 to 9
+Comment "*** now ttt contains 0,1,3,3,2,1" on line 44, char 11 to 42
+ID value tt on line 46, char 0 to 1
+ASSIGN value = on line 46, char 2
+ID value t on line 46, char 3
+Comment "*** now tt contains 0,1,3" on line 46, char 5 to 29
+ID value a on line 48, char 0
+LBRAK value [ on line 48, char 1
+INT_LIT value 1 on line 48, char 2
+RBRAK value ] on line 48, char 3
+OP_COMMA value , on line 48, char 4
+ID value a on line 48, char 5
+LBRAK value [ on line 48, char 6
+INT_LIT value 2 on line 48, char 7
+RBRAK value ] on line 48, char 8
+ASSIGN value = on line 48, char 9
+ID value a on line 48, char 10
+LBRAK value [ on line 48, char 11
+INT_LIT value 2 on line 48, char 12
+RBRAK value ] on line 48, char 13
+OP_COMMA value , on line 48, char 14
+ID value a on line 48, char 15
+LBRAK value [ on line 48, char 16
+INT_LIT value 1 on line 48, char 17
+RBRAK value ] on line 48, char 18
+Comment "*** exchanged; same as a[1]<->a[2]" on line 48, char 20 to 53
+Comment "*** I am sure we will construct many more interesting examples eventually" on line 50, char 0 to 72
+I am done
+-----------------------------Running Custom Sample Test 1-----------------------------
+ERROR: : is not a valid token
+ERROR: : is not a valid token
+ERROR: : is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: : is not a valid token
+ERROR: " is not a valid token
+ERROR: \ is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: \ is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: \ is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: \ is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: : is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: \ is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: \ is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: : is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: \ is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: : is not a valid token
+ID value class on line 0, char 0 to 4
+ID value Token on line 0, char 6 to 10
+ID value def on line 2, char 4 to 6
+ID value __init__ on line 2, char 8 to 15
+LPAR value ( on line 2, char 16
+ID value self on line 2, char 17 to 20
+OP_COMMA value , on line 2, char 21
+ID value name on line 2, char 23 to 26
+OP_COMMA value , on line 2, char 27
+ID value value on line 2, char 29 to 33
+OP_COMMA value , on line 2, char 34
+ID value line on line 2, char 36 to 39
+OP_COMMA value , on line 2, char 40
+ID value char_pos on line 2, char 42 to 49
+RPAR value ) on line 2, char 50
+ID value self on line 3, char 8 to 11
+OP_DOT value . on line 3, char 12
+ID value name on line 3, char 13 to 16
+ASSIGN value = on line 3, char 18
+ID value name on line 3, char 20 to 23
+ID value self on line 4, char 8 to 11
+OP_DOT value . on line 4, char 12
+ID value value on line 4, char 13 to 17
+ASSIGN value = on line 4, char 19
+ID value value on line 4, char 21 to 25
+ID value self on line 5, char 8 to 11
+OP_DOT value . on line 5, char 12
+ID value line on line 5, char 13 to 16
+ASSIGN value = on line 5, char 18
+ID value line on line 5, char 20 to 23
+ID value self on line 6, char 8 to 11
+OP_DOT value . on line 6, char 12
+ID value char_pos on line 6, char 13 to 20
+ASSIGN value = on line 6, char 22
+ID value char_pos on line 6, char 24 to 31
+ID value def on line 8, char 4 to 6
+ID value __str__ on line 8, char 8 to 14
+LPAR value ( on line 8, char 15
+ID value self on line 8, char 16 to 19
+RPAR value ) on line 8, char 20
+KW_IF value if on line 9, char 8 to 9
+ID value self on line 9, char 11 to 14
+OP_DOT value . on line 9, char 15
+ID value name on line 9, char 16 to 19
+OP_EQUAL value == on line 9, char 21 to 22
+ID value COMMENT on line 9, char 25 to 31
+RETURN value return on line 10, char 12 to 17
+ID value Comment on line 10, char 20 to 26
+OP_PLUS value + on line 10, char 32
+ID value self on line 10, char 34 to 37
+OP_DOT value . on line 10, char 38
+ID value value on line 10, char 39 to 43
+OP_PLUS value + on line 10, char 45
+ID value on on line 10, char 51 to 52
+ID value line on line 10, char 54 to 57
+OP_PLUS value + on line 11, char 16
+ID value str on line 11, char 18 to 20
+LPAR value ( on line 11, char 21
+ID value self on line 11, char 22 to 25
+OP_DOT value . on line 11, char 26
+ID value line on line 11, char 27 to 30
+RPAR value ) on line 11, char 31
+OP_PLUS value + on line 11, char 33
+OP_COMMA value , on line 11, char 36
+ID value char on line 11, char 38 to 41
+OP_PLUS value + on line 11, char 45
+ID value str on line 11, char 47 to 49
+LPAR value ( on line 11, char 50
+ID value self on line 11, char 51 to 54
+OP_DOT value . on line 11, char 55
+ID value char_pos on line 11, char 56 to 63
+RPAR value ) on line 11, char 64
+OP_PLUS value + on line 12, char 16
+ID value to on line 12, char 20 to 21
+OP_PLUS value + on line 12, char 25
+ID value str on line 12, char 27 to 29
+LPAR value ( on line 12, char 30
+ID value self on line 12, char 31 to 34
+OP_DOT value . on line 12, char 35
+ID value char_pos on line 12, char 36 to 43
+OP_PLUS value + on line 12, char 45
+ID value len on line 12, char 47 to 49
+LPAR value ( on line 12, char 50
+ID value self on line 12, char 51 to 54
+OP_DOT value . on line 12, char 55
+ID value value on line 12, char 56 to 60
+RPAR value ) on line 12, char 61
+OP_MINUS value - on line 12, char 63
+INT_LIT value 1 on line 12, char 65
+RPAR value ) on line 12, char 66
+KW_IF value if on line 13, char 8 to 9
+ID value len on line 13, char 11 to 13
+LPAR value ( on line 13, char 14
+ID value self on line 13, char 15 to 18
+OP_DOT value . on line 13, char 19
+ID value value on line 13, char 20 to 24
+RPAR value ) on line 13, char 25
+OP_GREATER value > on line 13, char 27
+INT_LIT value 1 on line 13, char 29
+RETURN value return on line 14, char 12 to 17
+ID value self on line 14, char 19 to 22
+OP_DOT value . on line 14, char 23
+ID value name on line 14, char 24 to 27
+OP_PLUS value + on line 14, char 29
+ID value value on line 14, char 33 to 37
+OP_PLUS value + on line 14, char 41
+ID value self on line 14, char 43 to 46
+OP_DOT value . on line 14, char 47
+ID value value on line 14, char 48 to 52
+OP_PLUS value + on line 14, char 54
+ID value on on line 14, char 58 to 59
+ID value line on line 14, char 61 to 64
+OP_PLUS value + on line 15, char 16
+ID value str on line 15, char 18 to 20
+LPAR value ( on line 15, char 21
+ID value self on line 15, char 22 to 25
+OP_DOT value . on line 15, char 26
+ID value line on line 15, char 27 to 30
+RPAR value ) on line 15, char 31
+OP_PLUS value + on line 15, char 33
+OP_COMMA value , on line 15, char 36
+ID value char on line 15, char 38 to 41
+OP_PLUS value + on line 15, char 45
+ID value str on line 15, char 47 to 49
+LPAR value ( on line 15, char 50
+ID value self on line 15, char 51 to 54
+OP_DOT value . on line 15, char 55
+ID value char_pos on line 15, char 56 to 63
+RPAR value ) on line 15, char 64
+OP_PLUS value + on line 16, char 16
+ID value to on line 16, char 20 to 21
+OP_PLUS value + on line 16, char 25
+ID value str on line 16, char 27 to 29
+LPAR value ( on line 16, char 30
+ID value self on line 16, char 31 to 34
+OP_DOT value . on line 16, char 35
+ID value char_pos on line 16, char 36 to 43
+OP_PLUS value + on line 16, char 45
+ID value len on line 16, char 47 to 49
+LPAR value ( on line 16, char 50
+ID value self on line 16, char 51 to 54
+OP_DOT value . on line 16, char 55
+ID value value on line 16, char 56 to 60
+RPAR value ) on line 16, char 61
+OP_MINUS value - on line 16, char 63
+INT_LIT value 1 on line 16, char 65
+RPAR value ) on line 16, char 66
+KW_ELSE value else on line 17, char 8 to 11
+RETURN value return on line 18, char 12 to 17
+ID value self on line 18, char 19 to 22
+OP_DOT value . on line 18, char 23
+ID value name on line 18, char 24 to 27
+OP_PLUS value + on line 18, char 29
+ID value value on line 18, char 33 to 37
+OP_PLUS value + on line 18, char 41
+ID value self on line 18, char 43 to 46
+OP_DOT value . on line 18, char 47
+ID value value on line 18, char 48 to 52
+OP_PLUS value + on line 18, char 54
+ID value on on line 18, char 58 to 59
+ID value line on line 18, char 61 to 64
+OP_PLUS value + on line 19, char 16
+ID value str on line 19, char 18 to 20
+LPAR value ( on line 19, char 21
+ID value self on line 19, char 22 to 25
+OP_DOT value . on line 19, char 26
+ID value line on line 19, char 27 to 30
+RPAR value ) on line 19, char 31
+OP_PLUS value + on line 19, char 33
+OP_COMMA value , on line 19, char 36
+ID value char on line 19, char 38 to 41
+OP_PLUS value + on line 19, char 45
+ID value str on line 19, char 47 to 49
+LPAR value ( on line 19, char 50
+ID value self on line 19, char 51 to 54
+OP_DOT value . on line 19, char 55
+ID value char_pos on line 19, char 56 to 63
+RPAR value ) on line 19, char 64
+ID value def on line 21, char 4 to 6
+ID value __repr__ on line 21, char 8 to 15
+LPAR value ( on line 21, char 16
+ID value self on line 21, char 17 to 20
+RPAR value ) on line 21, char 21
+RETURN value return on line 22, char 8 to 13
+ID value str on line 22, char 15 to 17
+LPAR value ( on line 22, char 18
+ID value self on line 22, char 19 to 22
+RPAR value ) on line 22, char 23
+I am done
+-----------------------------Running Custom Sample Test 2-----------------------------
+ERROR: : is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: # is not a valid token
+ERROR: : is not a valid token
+ERROR: # is not a valid token
+ERROR: : is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: # is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: # is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: # is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: # is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: # is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ERROR: " is not a valid token
+ID value from on line 0, char 0 to 3
+ID value lexer on line 0, char 5 to 9
+ID value import on line 0, char 11 to 16
+ID value Lexer on line 0, char 18 to 22
+ID value import on line 1, char 0 to 5
+ID value os on line 1, char 7 to 8
+ID value def on line 4, char 0 to 2
+ID value scan_file on line 4, char 4 to 12
+LPAR value ( on line 4, char 13
+ID value fname on line 4, char 14 to 18
+OP_COMMA value , on line 4, char 19
+ID value scanner on line 4, char 21 to 27
+OP_COMMA value , on line 4, char 28
+ID value test_name on line 4, char 30 to 38
+RPAR value ) on line 4, char 39
+PRINT value print on line 5, char 4 to 8
+LPAR value ( on line 5, char 9
+OP_MINUS value - on line 5, char 11
+OP_MINUS value - on line 5, char 12
+OP_MINUS value - on line 5, char 13
+OP_MINUS value - on line 5, char 14
+OP_MINUS value - on line 5, char 15
+OP_MINUS value - on line 5, char 16
+OP_MINUS value - on line 5, char 17
+OP_MINUS value - on line 5, char 18
+OP_MINUS value - on line 5, char 19
+OP_MINUS value - on line 5, char 20
+OP_MINUS value - on line 5, char 21
+OP_MINUS value - on line 5, char 22
+OP_MINUS value - on line 5, char 23
+OP_MINUS value - on line 5, char 24
+OP_MINUS value - on line 5, char 25
+OP_MINUS value - on line 5, char 26
+OP_MINUS value - on line 5, char 27
+OP_MINUS value - on line 5, char 28
+OP_MINUS value - on line 5, char 29
+OP_MINUS value - on line 5, char 30
+OP_MINUS value - on line 5, char 31
+OP_MINUS value - on line 5, char 32
+OP_MINUS value - on line 5, char 33
+OP_MINUS value - on line 5, char 34
+OP_MINUS value - on line 5, char 35
+OP_MINUS value - on line 5, char 36
+OP_MINUS value - on line 5, char 37
+OP_MINUS value - on line 5, char 38
+OP_MINUS value - on line 5, char 39
+ID value Running on line 5, char 40 to 46
+OP_PLUS value + on line 5, char 50
+ID value test_name on line 5, char 52 to 60
+OP_PLUS value + on line 5, char 62
+OP_MINUS value - on line 6, char 11
+OP_MINUS value - on line 6, char 12
+OP_MINUS value - on line 6, char 13
+OP_MINUS value - on line 6, char 14
+OP_MINUS value - on line 6, char 15
+OP_MINUS value - on line 6, char 16
+OP_MINUS value - on line 6, char 17
+OP_MINUS value - on line 6, char 18
+OP_MINUS value - on line 6, char 19
+OP_MINUS value - on line 6, char 20
+OP_MINUS value - on line 6, char 21
+OP_MINUS value - on line 6, char 22
+OP_MINUS value - on line 6, char 23
+OP_MINUS value - on line 6, char 24
+OP_MINUS value - on line 6, char 25
+OP_MINUS value - on line 6, char 26
+OP_MINUS value - on line 6, char 27
+OP_MINUS value - on line 6, char 28
+OP_MINUS value - on line 6, char 29
+OP_MINUS value - on line 6, char 30
+OP_MINUS value - on line 6, char 31
+OP_MINUS value - on line 6, char 32
+OP_MINUS value - on line 6, char 33
+OP_MINUS value - on line 6, char 34
+OP_MINUS value - on line 6, char 35
+OP_MINUS value - on line 6, char 36
+OP_MINUS value - on line 6, char 37
+OP_MINUS value - on line 6, char 38
+OP_MINUS value - on line 6, char 39
+RPAR value ) on line 6, char 41
+ID value Read on line 8, char 6 to 9
+ID value the on line 8, char 11 to 13
+ID value file on line 8, char 15 to 18
+ID value with on line 9, char 4 to 7
+ID value open on line 9, char 9 to 12
+LPAR value ( on line 9, char 13
+ID value fname on line 9, char 14 to 18
+RPAR value ) on line 9, char 19
+ID value as on line 9, char 21 to 22
+ID value f on line 9, char 24
+ID value code on line 10, char 8 to 11
+ASSIGN value = on line 10, char 13
+ID value f on line 10, char 15
+OP_DOT value . on line 10, char 16
+ID value read on line 10, char 17 to 20
+LPAR value ( on line 10, char 21
+RPAR value ) on line 10, char 22
+ID value lex on line 12, char 6 to 8
+ID value the on line 12, char 10 to 12
+ID value source on line 12, char 14 to 19
+ID value code on line 12, char 21 to 24
+ID value scanner on line 13, char 4 to 10
+OP_DOT value . on line 13, char 11
+KW_IN value in on line 13, char 12 to 13
+ID value put on line 13, char 14 to 16
+LPAR value ( on line 13, char 17
+ID value code on line 13, char 18 to 21
+RPAR value ) on line 13, char 22
+ID value token on line 14, char 4 to 8
+ASSIGN value = on line 14, char 10
+ID value scanner on line 14, char 12 to 18
+OP_DOT value . on line 14, char 19
+ID value next on line 14, char 20 to 23
+LPAR value ( on line 14, char 24
+RPAR value ) on line 14, char 25
+KW_WHILE value while on line 15, char 4 to 8
+ID value token on line 15, char 10 to 14
+PRINT value print on line 16, char 8 to 12
+LPAR value ( on line 16, char 13
+ID value token on line 16, char 14 to 18
+RPAR value ) on line 16, char 19
+ID value token on line 17, char 8 to 12
+ASSIGN value = on line 17, char 14
+ID value scanner on line 17, char 16 to 22
+OP_DOT value . on line 17, char 23
+ID value next on line 17, char 24 to 27
+LPAR value ( on line 17, char 28
+RPAR value ) on line 17, char 29
+PRINT value print on line 18, char 4 to 8
+LPAR value ( on line 18, char 9
+ID value I on line 18, char 11
+ID value am on line 18, char 13 to 14
+KW_DO value do on line 18, char 16 to 17
+ID value ne on line 18, char 18 to 19
+RPAR value ) on line 18, char 21
+ID value dir on line 21, char 0 to 2
+ASSIGN value = on line 21, char 4
+ID value os on line 21, char 6 to 7
+OP_DOT value . on line 21, char 8
+ID value path on line 21, char 9 to 12
+OP_DOT value . on line 21, char 13
+ID value realpath on line 21, char 14 to 21
+LPAR value ( on line 21, char 22
+ID value os on line 22, char 4 to 5
+OP_DOT value . on line 22, char 6
+ID value path on line 22, char 7 to 10
+OP_DOT value . on line 22, char 11
+ID value join on line 22, char 12 to 15
+LPAR value ( on line 22, char 16
+ID value os on line 22, char 17 to 18
+OP_DOT value . on line 22, char 19
+ID value getcwd on line 22, char 20 to 25
+LPAR value ( on line 22, char 26
+RPAR value ) on line 22, char 27
+OP_COMMA value , on line 22, char 28
+ID value os on line 22, char 30 to 31
+OP_DOT value . on line 22, char 32
+ID value path on line 22, char 33 to 36
+OP_DOT value . on line 22, char 37
+ID value dirname on line 22, char 38 to 44
+LPAR value ( on line 22, char 45
+ID value __file__ on line 22, char 46 to 53
+RPAR value ) on line 22, char 54
+RPAR value ) on line 22, char 55
+RPAR value ) on line 22, char 56
+ID value scanner on line 23, char 0 to 6
+ASSIGN value = on line 23, char 8
+ID value Lexer on line 23, char 10 to 14
+LPAR value ( on line 23, char 15
+RPAR value ) on line 23, char 16
+ID value Piazza on line 25, char 2 to 7
+ID value Sample on line 25, char 9 to 14
+ID value Test on line 25, char 16 to 19
+INT_LIT value 1 on line 25, char 21
+ID value scan_file on line 26, char 0 to 8
+LPAR value ( on line 26, char 9
+ID value os on line 26, char 10 to 11
+OP_DOT value . on line 26, char 12
+ID value path on line 26, char 13 to 16
+OP_DOT value . on line 26, char 17
+ID value join on line 26, char 18 to 21
+LPAR value ( on line 26, char 22
+ID value dir on line 26, char 23 to 25
+OP_COMMA value , on line 26, char 26
+ID value p on line 26, char 29
+INT_LIT value 1 on line 26, char 30
+ID value test on line 26, char 31 to 34
+INT_LIT value 1 on line 26, char 35
+OP_DOT value . on line 26, char 36
+ID value txt on line 26, char 37 to 39
+RPAR value ) on line 26, char 41
+OP_COMMA value , on line 26, char 42
+ID value scanner on line 26, char 44 to 50
+OP_COMMA value , on line 26, char 51
+ID value Piazza on line 26, char 54 to 59
+ID value Sample on line 26, char 61 to 66
+ID value Test on line 26, char 68 to 71
+INT_LIT value 1 on line 26, char 73
+RPAR value ) on line 26, char 75
+ID value Piazza on line 28, char 2 to 7
+ID value Sample on line 28, char 9 to 14
+ID value Test on line 28, char 16 to 19
+INT_LIT value 2 on line 28, char 21
+ID value scan_file on line 29, char 0 to 8
+LPAR value ( on line 29, char 9
+ID value os on line 29, char 10 to 11
+OP_DOT value . on line 29, char 12
+ID value path on line 29, char 13 to 16
+OP_DOT value . on line 29, char 17
+ID value join on line 29, char 18 to 21
+LPAR value ( on line 29, char 22
+ID value dir on line 29, char 23 to 25
+OP_COMMA value , on line 29, char 26
+ID value p on line 29, char 29
+INT_LIT value 1 on line 29, char 30
+ID value test on line 29, char 31 to 34
+INT_LIT value 2 on line 29, char 35
+OP_DOT value . on line 29, char 36
+ID value txt on line 29, char 37 to 39
+RPAR value ) on line 29, char 41
+OP_COMMA value , on line 29, char 42
+ID value scanner on line 29, char 44 to 50
+OP_COMMA value , on line 29, char 51
+ID value Piazza on line 29, char 54 to 59
+ID value Sample on line 29, char 61 to 66
+ID value Test on line 29, char 68 to 71
+INT_LIT value 2 on line 29, char 73
+RPAR value ) on line 29, char 75
+ID value Piazza on line 31, char 2 to 7
+ID value Sample on line 31, char 9 to 14
+ID value Test on line 31, char 16 to 19
+INT_LIT value 3 on line 31, char 21
+ID value scan_file on line 32, char 0 to 8
+LPAR value ( on line 32, char 9
+ID value os on line 32, char 10 to 11
+OP_DOT value . on line 32, char 12
+ID value path on line 32, char 13 to 16
+OP_DOT value . on line 32, char 17
+ID value join on line 32, char 18 to 21
+LPAR value ( on line 32, char 22
+ID value dir on line 32, char 23 to 25
+OP_COMMA value , on line 32, char 26
+ID value p on line 32, char 29
+INT_LIT value 1 on line 32, char 30
+ID value test on line 32, char 31 to 34
+INT_LIT value 3 on line 32, char 35
+OP_DOT value . on line 32, char 36
+ID value txt on line 32, char 37 to 39
+RPAR value ) on line 32, char 41
+OP_COMMA value , on line 32, char 42
+ID value scanner on line 32, char 44 to 50
+OP_COMMA value , on line 32, char 51
+ID value Piazza on line 32, char 54 to 59
+ID value Sample on line 32, char 61 to 66
+ID value Test on line 32, char 68 to 71
+INT_LIT value 3 on line 32, char 73
+RPAR value ) on line 32, char 75
+ID value Custom on line 34, char 2 to 7
+ID value Sample on line 34, char 9 to 14
+ID value Test on line 34, char 16 to 19
+INT_LIT value 1 on line 34, char 21
+ID value scan_file on line 35, char 0 to 8
+LPAR value ( on line 35, char 9
+ID value os on line 35, char 10 to 11
+OP_DOT value . on line 35, char 12
+ID value path on line 35, char 13 to 16
+OP_DOT value . on line 35, char 17
+ID value join on line 35, char 18 to 21
+LPAR value ( on line 35, char 22
+ID value dir on line 35, char 23 to 25
+OP_COMMA value , on line 35, char 26
+ID value mytest on line 35, char 29 to 34
+INT_LIT value 1 on line 35, char 35
+OP_DOT value . on line 35, char 36
+ID value txt on line 35, char 37 to 39
+RPAR value ) on line 35, char 41
+OP_COMMA value , on line 35, char 42
+ID value scanner on line 35, char 44 to 50
+OP_COMMA value , on line 35, char 51
+ID value Custom on line 35, char 54 to 59
+ID value Sample on line 35, char 61 to 66
+ID value Test on line 35, char 68 to 71
+INT_LIT value 1 on line 35, char 73
+RPAR value ) on line 35, char 75
+ID value Custom on line 37, char 2 to 7
+ID value Sample on line 37, char 9 to 14
+ID value Test on line 37, char 16 to 19
+INT_LIT value 2 on line 37, char 21
+ID value scan_file on line 38, char 0 to 8
+LPAR value ( on line 38, char 9
+ID value os on line 38, char 10 to 11
+OP_DOT value . on line 38, char 12
+ID value path on line 38, char 13 to 16
+OP_DOT value . on line 38, char 17
+ID value join on line 38, char 18 to 21
+LPAR value ( on line 38, char 22
+ID value dir on line 38, char 23 to 25
+OP_COMMA value , on line 38, char 26
+ID value mytest on line 38, char 29 to 34
+INT_LIT value 2 on line 38, char 35
+OP_DOT value . on line 38, char 36
+ID value txt on line 38, char 37 to 39
+RPAR value ) on line 38, char 41
+OP_COMMA value , on line 38, char 42
+ID value scanner on line 38, char 44 to 50
+OP_COMMA value , on line 38, char 51
+ID value Custom on line 38, char 54 to 59
+ID value Sample on line 38, char 61 to 66
+ID value Test on line 38, char 68 to 71
+INT_LIT value 2 on line 38, char 73
+RPAR value ) on line 38, char 75
+I am done
