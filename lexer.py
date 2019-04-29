@@ -97,7 +97,6 @@ class Lexer():
 
         # Reset the value of this counter for further use
         self.token_pos = 0
-        return raw_output
 
     # Recursively return the next valid token in the token list
     def _next(self):
