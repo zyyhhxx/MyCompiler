@@ -144,9 +144,8 @@ class ProjectParser():
 
         @self.pg.production('declaration : KW_ARRAY ID LBRAK expression \
             OP_DOTDOT expression RBRAK id_assign SEMI')
-        @self.pg.production('declaration : KW_LOCAL ID ASSIGN expression SEMI')
-        @self.pg.production('declaration : KW_GLOBAL ID ASSIGN expression \
-            SEMI')
+        @self.pg.production('declaration : KW_LOCAL ID assign SEMI')
+        @self.pg.production('declaration : KW_GLOBAL ID assign SEMI')
         def declaration(p):
             return Node("decl", p)
 
@@ -154,6 +153,11 @@ class ProjectParser():
         @self.pg.production('id_assign : ')
         def id_assign(p):
             return Node("id_assign", p)
+
+        @self.pg.production('assign : ASSIGN expression')
+        @self.pg.production('assign : ')
+        def assign(p):
+            return Node("assign", p)
 
         @self.pg.error
         def error_handler(token):
