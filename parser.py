@@ -1,4 +1,5 @@
 from rply import ParserGenerator
+import ast
 token_list = ['KW_ARRAY', 'OP_DOTDOT', 'LBRAK', 'RBRAK', 'SEMI', 'KW_TUPLE',
               'KW_LOCAL', 'KW_GLOBAL', 'KW_DEFUN', 'LPAR', 'RPAR', 'OP_COMMA',
               'KW_END', 'KW_WHILE', 'KW_DO', 'KW_IF', 'KW_THEN', 'KW_ELSIF',
@@ -36,17 +37,34 @@ class ProjectParser():
         def input(p):
             return Node("input", p)
 
-        @self.pg.production('expression : INT_LIT')
+        
         @self.pg.production('expression : lhs_item')
         @self.pg.production('expression : ID expression')
         @self.pg.production('expression : LPAR expression RPAR')
+        def expr(p):
+            return Node("expr", p)
+
         @self.pg.production('expression : expression OP_MULT expression')
         @self.pg.production('expression : expression OP_DIV expression')
         @self.pg.production('expression : expression OP_PLUS expression')
         @self.pg.production('expression : expression OP_MINUS expression')
         @self.pg.production('expression : expression OP_COMMA expression')
-        def expr(p):
-            return Node("expr", p)
+        @self.pg.production('bool_expression : expression OP_LESS expression')
+        @self.pg.production('bool_expression : expression OP_GREATER \
+            expression')
+        @self.pg.production('bool_expression : expression OP_EQUAL expression')
+        @self.pg.production('bool_expression : expression OP_NOTEQUA \
+            expression')
+        @self.pg.production('bool_expression : expression OP_LESSEQUAL \
+            expression')
+        @self.pg.production('bool_expression : expression OP_GREATEREQUAL \
+            expression')
+        def binaryOp(p):
+            return ast.BinaryOperation(p[1], p[0], p[2])
+
+        @self.pg.production('expression : INT_LIT')
+        def integer(p):
+            return ast.Integer(p[0])
 
         @self.pg.production('lhs_item : ID')
         @self.pg.production('lhs_item : ID OP_DOT INT_LIT')
@@ -58,19 +76,6 @@ class ProjectParser():
         @self.pg.production('lhs : lhs OP_COMMA lhs_item')
         def lhs(p):
             return Node("lhs", p)
-
-        @self.pg.production('bool_expression : expression OP_LESS expression')
-        @self.pg.production('bool_expression : expression OP_GREATER \
-            expression')
-        @self.pg.production('bool_expression : expression OP_EQUAL expression')
-        @self.pg.production('bool_expression : expression OP_NOTEQUA \
-            expression')
-        @self.pg.production('bool_expression : expression OP_LESSEQUAL \
-            expression')
-        @self.pg.production('bool_expression : expression OP_GREATEREQUAL \
-            expression')
-        def bool_expr(p):
-            return Node("bool_expr", p)
 
         @self.pg.production('range : expression OP_DOTDOT expression')
         def range(p):
