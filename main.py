@@ -22,10 +22,10 @@ def scan_file(fname, test_name):
     tokens = scanner.input(code)
     parser = ProjectParser()
     ast = parser.input(tokens)
-    # print_tree_preorder(ast)
-    scoper = Scoper()
-    scoper.scope(ast)
-    print(scoper)
+    print_tree_preorder(ast)
+    # scoper = Scoper()
+    # scoper.scope(ast)
+    # print(scoper)
 
 
 def print_tree(node, dot_num=0):
