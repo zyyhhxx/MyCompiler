@@ -3,7 +3,10 @@ errors = []
 declarations = []
 usage = []
 print_queue = []
+
+# Functions
 return_value = None
+parameters = None
 
 
 def error(message):
@@ -15,15 +18,12 @@ class Scopes():
         self.scopes = []
         self.globals = {}
 
-    def push_scope(self, token):
+    def push_scope(self):
         self.scopes.append({})
 
-    def pop_scope(self, token):
+    def pop_scope(self):
         if len(self.scopes) > 0:
             self.scopes.pop()
-        else:
-            error("%s: Cannot pop scope because the stack is empty" %
-                  (str(token.source_pos.lineno)))
 
     def get_symbol(self, id):
         # Try local vars first
@@ -34,15 +34,13 @@ class Scopes():
                               var.line()))
                 return var
         # Global vars
-        else:
-            if id.name in self.globals:
-                var = self.globals[id.name]
-                usage.append(("global", id.name, id.line(), type(var.value),
-                              var.line()))
-                return var
-            else:
-                error("%s: Variable %s is not declared yet" %
-                      (str(id.line()), id.name))
+        if id.name in self.globals:
+            var = self.globals[id.name]
+            usage.append(("global", id.name, id.line(), type(var.value),
+                         var.line()))
+            return var
+        error("%s: Variable %s is not declared yet" %
+              (str(id.line()), id.name))
 
     def add_symbol_local(self, id):
         declarations.append(("local", id.name, id.line(), type(id.value)))
@@ -80,11 +78,15 @@ class ASTBase(BaseBox):
 
 
 class Node(BaseBox):
-    def __init__(self, token_list):
+    def __init__(self, name, token_list):
+        self.grammar_name = name
         self.token_list = token_list
 
     def __str__(self):
         return "Node: " + str(self.token_list)
+
+    def __repr__(self):
+        return str(self)
 
     def eval(self):
         # Find all non-tokens in the list and eval it
@@ -144,8 +146,8 @@ class IntegerType(ASTBase):
 class ArrayType(ASTBase):
     def __init__(self, token, size):
         super().__init__(token)
-        self.values = [None] * size
-        self.size = self.size
+        self.values = [IntegerType(self.token, 0)] * size
+        self.size = size
 
     def tuple_assign(self, assignment):
         values = assignment.values
@@ -164,7 +166,9 @@ class TupleType(ASTBase):
         super().__init__(token)
         self.values = []
         for value in values:
-            values.append(value)
+            self.values.append(value)
+        # Tuple elements come in reversed
+        self.values.reverse()
         self.size = len(self.values)
 
     def eval(self):
@@ -196,7 +200,7 @@ class BinaryOperation(ASTBase):
         lhs = self.left.eval()
         rhs = self.right.eval()
 
-        if type(lhs) is None or type(rhs) is None:
+        if lhs is None or rhs is None:
             return
 
         if type(lhs) is ID:
@@ -206,6 +210,15 @@ class BinaryOperation(ASTBase):
             else:
                 lhs = lhs.value
 
+        # Tuple assignment
+        if type(lhs) is list:
+            for item in lhs:
+                if type(item) is not IntegerType:
+                    error("%s: tuple element must be integers" %
+                          (self.line()))
+                    return
+            lhs = TupleType(self.token, lhs)
+
         if type(rhs) is ID:
             rhs = scopes.get_symbol(rhs)
             if rhs is None:
@@ -213,11 +226,20 @@ class BinaryOperation(ASTBase):
             else:
                 rhs = rhs.value
 
+        # Tuple assignment
+        if type(rhs) is list:
+            for item in rhs:
+                if type(item) is not IntegerType:
+                    error("%s: tuple element must be integers" %
+                          (self.line()))
+                    return
+            rhs = TupleType(self.token, rhs)
+
         if not (type(lhs) is IntegerType and type(rhs) is IntegerType) and\
                 not (type(lhs) is BoolType and type(rhs) is BoolType):
             error("%s: operator \"%s\" cannot operate on %s and %s" %
-                  (self.line(), self.token.value, str(type(self.left)),
-                   str(type(self.right))))
+                  (self.line(), self.token.value, str(type(lhs)),
+                   str(type(rhs))))
             return
 
         # Numeric operations
@@ -250,16 +272,33 @@ class CommaOperation(BinaryOperation):
         rhs = self.right.eval()
         lhs = self.left.eval()
         result_list = []
-        if type(rhs) is IntegerType:
-            result_list.append(rhs)
-        else:
+
+        if type(lhs) is ID:
+            lhs = scopes.get_symbol(lhs)
+            if lhs is None:
+                return
+            else:
+                lhs = lhs.value
+
+        if type(rhs) is ID:
+            rhs = scopes.get_symbol(rhs)
+            if rhs is None:
+                return
+            else:
+                rhs = rhs.value
+
+        if type(rhs) is list:
             for i in rhs:
                 result_list.append(i)
-        if type(lhs) is IntegerType:
-            result_list.append(lhs)
         else:
+            result_list.append(rhs)
+
+        if type(lhs) is list:
             for i in lhs:
                 result_list.append(i)
+        else:
+            result_list.append(lhs)
+
         return result_list
 
 
@@ -278,14 +317,21 @@ class Indexed(Node):
                   (self.line(), self.token.value, str(type(self.left)),
                    str(type(self.right))))
         else:
-            index = self.token_list[2].eval()
+            index = None
+            # Index is an expression
+            if type(self.token_list[2]) is not Token:
+                index = self.token_list[2].eval()
+            # Index is an integer
+            else:
+                index = IntegerType(self.token_list[2])
+
             if type(index) is not IntegerType:
                 error("%s: index must be an integer" %
                       (self.line()))
             # Check if the index is in range
             if index.value >= var.size or index.value < 0:
-                error("%s: index %s out of range of variable \"%s\"" %
-                      (self.line(), str(index.value), var.name))
+                error("%s: index %s out of range" %
+                      (self.line(), str(index.value)))
                 return
             return var.values[index.value]
 
@@ -305,7 +351,7 @@ class Range(BinaryOperation):
             error("%s: two sides of range must be integers" %
                   (self.line()))
             return
-        elif lhs > rhs:
+        elif lhs.value > rhs.value:
             error("%s: range left side %s is larger than right side %s" %
                   (self.line(), str(lhs), str(rhs)))
             return
@@ -324,7 +370,12 @@ class Assign(ASTBase):
             return
 
         # Tuple assignment
-        if result is list:
+        if type(result) is list:
+            for item in result:
+                if type(item) is not IntegerType:
+                    error("%s: tuple element must be integers" %
+                          (self.line()))
+                    return
             result = TupleType(self.token, result)
 
         return result
@@ -344,9 +395,10 @@ class Declaration(ASTBase):
         # Global variables
         if key == "KW_GLOBAL":
             scopes.add_symbol_global(self.id)
+            return
 
         # Local variables
-        if key == "KW_GLOBAL":
+        if key == "KW_LOCAL":
             scopes.add_symbol_local(self.id)
 
 
@@ -368,12 +420,13 @@ class ArrayDeclaration(ASTBase):
         if var is None:
             return
 
-        if type(var.value) is not None and type(var.value) is not ArrayType:
+        if var.value is not None and type(var.value) is not ArrayType:
             error("%s: %s cannot be declared as an array" %
                   (self.line(), self.id.name))
             return
 
-        var.value = ArrayType(self.token, range_result[1] - range_result[0])
+        var.value = ArrayType(self.token,
+                              range_result[1].value - range_result[0].value)
 
         if assignment_result is None:
             return
@@ -397,7 +450,11 @@ class AssignStatement(BinaryOperation):
         if lhs is None or rhs is None:
             return
 
-        if type(lhs) is not ID:
+        if type(lhs) is ID:
+            lhs = scopes.get_symbol(lhs)
+            if lhs is None:
+                return
+        else:
             error("%s: can only assign to a variable" %
                   (self.line()))
             return
@@ -407,35 +464,43 @@ class AssignStatement(BinaryOperation):
                   (self.line()))
             return
 
-        if type(rhs.value) is ArrayType:
-            error("%s: cannot assign a whole array to a variable" %
-                  (self.line()))
-            return
+        if type(rhs) is ID:
+            rhs = scopes.get_symbol(rhs)
+            if rhs is None:
+                return
+
+            if rhs.value is None:
+                error("%s: %s has no value to assign" %
+                      (self.line(), rhs.name))
+                return
+
+            if type(rhs.value) is ArrayType:
+                error("%s: cannot assign a whole array to a variable" %
+                      (self.line()))
+                return
+
+            rhs = rhs.value
+
+        # Tuple assignment
+        if type(rhs) is list:
+            for item in rhs:
+                if type(item) is not IntegerType:
+                    error("%s: tuple element must be integers" %
+                          (self.line()))
+                    return
+            rhs = TupleType(self.token, rhs)
 
         if type(lhs.value) is not type(rhs):
             error("%s: cannot assign %s to %s" %
                   (self.line(), str(type(lhs.value)), str(type(rhs))))
             return
 
-        lhs_id = scopes.get_symbol(lhs)
+        if type(lhs.value) is TupleType and type(rhs) is TupleType:
+            if lhs.value.size != rhs.size:
+                error("%s: tuple sizes do not match" % (self.line()))
 
-        if lhs_id is None:
-            return
-
-        if type(rhs) is ID:
-            rhs_id = scopes.get_symbol(rhs)
-
-            if rhs_id is None:
-                return
-
-            if rhs_id.value is None:
-                error("%s: %s has no value to assign" %
-                      (self.line(), rhs_id.name))
-                return
-
-            lhs_id.value = rhs_id.value
         else:
-            lhs_id.value = rhs
+            lhs.value = rhs
 
 
 class ExchangeStatement(BinaryOperation):
@@ -471,10 +536,37 @@ class PrintStatement(ASTBase):
         if message is None:
             return
 
+        # A lits of messages
+        if type(message) is list:
+            for item in message:
+                print_item = item
+                if type(print_item) is ID:
+                    result = scopes.get_symbol(print_item)
+                    if result is None:
+                        return
+                    print_item = result.value
+
+                if type(print_item) is IntegerType or\
+                        type(print_item) is BoolType:
+                    print_queue.append(print_item.value)
+                else:
+                    error("%s: type %s cannot be printed" %
+                          (self.line(), str(type(print_item))))
+                    return
+            return
+
+        # Single message
+        if type(message) is ID:
+            result = scopes.get_symbol(message)
+            if result is None:
+                return
+            message = result.value
+
         if type(message) is IntegerType or type(message) is BoolType:
             print_queue.append(message.value)
         else:
-            print_queue.append(message.values)
+            error("%s: type %s cannot be printed" %
+                  (self.line(), str(type(message))))
 
 
 class WhileLoop(ASTBase):
@@ -497,7 +589,7 @@ class WhileLoop(ASTBase):
         scopes.pop_scope()
 
 
-class ForeachLoop  (ASTBase):
+class ForeachLoop (ASTBase):
     def __init__(self, token, counter, iterator, statements):
         super().__init__(token)
         self.counter = counter
@@ -506,30 +598,39 @@ class ForeachLoop  (ASTBase):
 
     def eval(self):
         scopes.push_scope()
-        counter_id = scopes.add_symbol_local()
+        counter_id = ID(self.counter)
+        scopes.add_symbol_local(counter_id)
 
-        iterator = self.iterator.eval()
+        if type(self.iterator) is Token:
+            iterator = scopes.get_symbol(ID(self.iterator))
+            if iterator is None:
+                scopes.pop_scope()
+                return
+            iterator = iterator.value
+        else:
+            iterator = self.iterator.eval()
+
+        if iterator is None:
+            scopes.pop_scope()
+            return
+
         target = 0
         # Range
         if type(iterator) is tuple:
             target = iterator[1]
             for i in range(target):
+                counter_id = scopes.get_symbol(counter_id)
                 counter_id.value = IntegerType(self.token, i)
                 self.statements.eval()
         # Array
         elif type(iterator) is ArrayType:
-            iterator = scopes.get_symbol(iterator)
-            if iterator is None:
-                scopes.pop_scope()
-                return
-            iterator = iterator.value
             target = iterator.size
             for i in range(target):
                 counter_id.value = iterator.values[i]
                 self.statements.eval()
         else:
-            error("%s: can only loop over a range or an array" %
-                  (self.line()))
+            error("%s: cannot only loop over type %s" %
+                  (self.line(), str(type(iterator))))
         scopes.pop_scope()
 
 
@@ -559,6 +660,19 @@ class ElseStatement(ASTBase):
 
     def eval(self):
         self.statements.eval()
+
+
+class Template(ASTBase):
+    def __init__(self, token, value=None):
+        super().__init__(token)
+        self.name = token.value
+        self.value = value
+
+    def eval(self):
+        return self.value
+
+    def validate(self):
+        return True
 
 
 class Template(ASTBase):

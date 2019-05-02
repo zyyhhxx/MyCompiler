@@ -24,14 +24,9 @@ class ProjectParser():
         return self.built_parser.parse(tokens)
 
     def parse(self):
-        @self.pg.production('expression : ID expression')
-        @self.pg.production('statement : RETURN expression SEMI')
-        def unknown(p):
-            return Node("unknown", p)
-
         @self.pg.production('start : input')
         def start(p):
-            return Node("start", p)
+            return ast_nodes.Node("start", p)
 
         @self.pg.production('input : ')
         @self.pg.production('input : statement')
@@ -41,7 +36,7 @@ class ProjectParser():
         @self.pg.production('input : input declaration')
         @self.pg.production('input : input definition')
         def input(p):
-            return Node("input", p)
+            return ast_nodes.Node("input", p)
 
         @self.pg.production('expression : LPAR expression RPAR')
         def expr(p):
@@ -79,7 +74,7 @@ class ProjectParser():
         @self.pg.production('expression : ID OP_DOT INT_LIT')
         @self.pg.production('expression : ID LBRAK expression RBRAK')
         def lhs_item(p):
-            return ast_nodes.Indexed("lhs_item", p)
+            return ast_nodes.Indexed("indexes", p)
 
         @self.pg.production('range : expression OP_DOTDOT expression')
         def range(p):
@@ -89,7 +84,7 @@ class ProjectParser():
         @self.pg.production('declarations : declaration')
         @self.pg.production('declarations : ')
         def declarations(p):
-            return Node("decls", p)
+            return ast_nodes.Node("decls", p)
 
         @self.pg.production('declaration : KW_ARRAY ID LBRAK range \
             RBRAK assign SEMI')
@@ -107,7 +102,7 @@ class ProjectParser():
 
         @self.pg.production('assign : ')
         def assign_empty(p):
-            return Node("assign", p)
+            return ast_nodes.Node("assign", p)
 
         @self.pg.production('statement : expression ASSIGN expression SEMI')
         def assign_stat(p):
@@ -144,11 +139,11 @@ class ProjectParser():
         @self.pg.production('statements : statements statement')
         @self.pg.production('statements : ')
         def statements(p):
-            return Node("stats", p)
+            return ast_nodes.Node("stats", p)
 
         @self.pg.production('elsif_statements : else_statement')
         def elsif_statement(p):
-            return Node("elsif_stats", p)
+            return ast_nodes.Node("elsif_stats", p)
 
         @self.pg.production('else_statement : KW_ELSE statements')
         def else_stat(p):
@@ -156,37 +151,33 @@ class ProjectParser():
 
         @self.pg.production('else_statement : ')
         def else_statement(p):
-            return Node("else_stat", p)
+            return ast_nodes.Node("else_stat", p)
 
         # For functions
+        @self.pg.production('expression : ID expression')
+        @self.pg.production('statement : RETURN expression SEMI')
+        def unknown(p):
+            return ast_nodes.Node("unknown", p)
+
         @self.pg.production('body : statements')
         @self.pg.production('body : declarations')
         @self.pg.production('body : body statements')
         @self.pg.production('body : body declarations')
         def body(p):
-            return Node("body", p)
+            return ast_nodes.Node("body", p)
 
         @self.pg.production('definition : KW_DEFUN ID LPAR ID comma_id RPAR \
             body KW_END KW_DEFUN')
         def definition(p):
-            return Node("def", p)
+            return ast_nodes.Node("def", p)
 
         @self.pg.production('comma_id : comma_id OP_COMMA ID')
         @self.pg.production('comma_id : OP_COMMA ID')
         @self.pg.production('comma_id : ')
         def comma_id(p):
-            return Node("comma_id", p)
+            return ast_nodes.Node("comma_id", p)
 
         @self.pg.error
         def error_handler(token):
             raise ValueError("Ran into an issue with %s at %s" %
                              (token, token.getsourcepos()))
-
-
-class Node():
-    def __init__(self, name, token_list):
-        self.grammar_name = name
-        self.token_list = token_list
-
-    def __str__(self):
-        return self.grammar_name + ": " + str(self.token_list)
