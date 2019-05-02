@@ -37,7 +37,6 @@ class ProjectParser():
             return Node("input", p)
 
         @self.pg.production('expression : INT_LIT')
-        @self.pg.production('expression : lhs_item')
         @self.pg.production('expression : ID expression')
         @self.pg.production('expression : LPAR expression RPAR')
         @self.pg.production('expression : expression OP_MULT expression')
@@ -45,19 +44,11 @@ class ProjectParser():
         @self.pg.production('expression : expression OP_PLUS expression')
         @self.pg.production('expression : expression OP_MINUS expression')
         @self.pg.production('expression : expression OP_COMMA expression')
+        @self.pg.production('expression : ID')
+        @self.pg.production('expression : ID OP_DOT INT_LIT')
+        @self.pg.production('expression : ID LBRAK expression RBRAK')
         def expr(p):
             return Node("expr", p)
-
-        @self.pg.production('lhs_item : ID')
-        @self.pg.production('lhs_item : ID OP_DOT INT_LIT')
-        @self.pg.production('lhs_item : ID LBRAK expression RBRAK')
-        def lhs_item(p):
-            return Node("lhs_item", p)
-
-        @self.pg.production('lhs : lhs_item')
-        @self.pg.production('lhs : lhs OP_COMMA lhs_item')
-        def lhs(p):
-            return Node("lhs", p)
 
         @self.pg.production('bool_expression : expression OP_LESS expression')
         @self.pg.production('bool_expression : expression OP_GREATER \
@@ -80,8 +71,8 @@ class ProjectParser():
         def array_id(p):
             return Node("array_id", p)
 
-        @self.pg.production('statement : lhs ASSIGN expression SEMI')
-        @self.pg.production('statement : lhs EXCHANGE lhs SEMI')
+        @self.pg.production('statement : expression ASSIGN expression SEMI')
+        @self.pg.production('statement : expression EXCHANGE expression SEMI')
         @self.pg.production('statement : KW_WHILE bool_expression KW_DO \
             statements KW_END KW_WHILE')
         @self.pg.production('statement : if_statement')
