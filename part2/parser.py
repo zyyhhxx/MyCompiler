@@ -67,18 +67,15 @@ class ProjectParser():
         def range(p):
             return Node("range", p)
 
-        @self.pg.production('array_id : ID')
-        def array_id(p):
-            return Node("array_id", p)
-
         @self.pg.production('statement : expression ASSIGN expression SEMI')
         @self.pg.production('statement : expression EXCHANGE expression SEMI')
         @self.pg.production('statement : KW_WHILE bool_expression KW_DO \
             statements KW_END KW_WHILE')
-        @self.pg.production('statement : if_statement')
+        @self.pg.production('statement : KW_IF bool_expression KW_THEN statements \
+            elsif_statements KW_END KW_IF')
         @self.pg.production('statement : KW_FOREACH ID KW_IN range KW_DO \
             statements KW_END KW_FOR')
-        @self.pg.production('statement : KW_FOREACH ID KW_IN array_id KW_DO \
+        @self.pg.production('statement : KW_FOREACH ID KW_IN ID KW_DO \
             statements KW_END KW_FOR')
         @self.pg.production('statement : RETURN expression SEMI')
         @self.pg.production('statement : PRINT expression SEMI')
@@ -91,16 +88,9 @@ class ProjectParser():
         def statements(p):
             return Node("stats", p)
 
-        @self.pg.production('if_statement : KW_IF bool_expression KW_THEN statements \
-            elsif_statements else_statement KW_END KW_IF')
-        def if_statement(p):
-            return Node("if_stat", p)
-
         @self.pg.production('elsif_statements : KW_ELSIF bool_expression KW_THEN \
-            statements')
-        @self.pg.production('elsif_statements : elsif_statements KW_ELSIF bool_expression \
-            KW_THEN statements')
-        @self.pg.production('elsif_statements : ')
+            statements elsif_statements')
+        @self.pg.production('elsif_statements : else_statement')
         def elsif_statement(p):
             return Node("elsif_stat", p)
 
@@ -133,8 +123,8 @@ class ProjectParser():
         def declarations(p):
             return Node("decls", p)
 
-        @self.pg.production('declaration : KW_ARRAY ID LBRAK expression \
-            OP_DOTDOT expression RBRAK id_assign SEMI')
+        @self.pg.production('declaration : KW_ARRAY ID LBRAK range RBRAK \
+            id_assign SEMI')
         @self.pg.production('declaration : KW_LOCAL ID ASSIGN expression SEMI')
         @self.pg.production('declaration : KW_GLOBAL ID ASSIGN expression \
             SEMI')
