@@ -1,5 +1,6 @@
 from rply import ParserGenerator
-import ast
+import ast_nodes
+
 token_list = ['KW_ARRAY', 'OP_DOTDOT', 'LBRAK', 'RBRAK', 'SEMI', 'KW_TUPLE',
               'KW_LOCAL', 'KW_GLOBAL', 'KW_DEFUN', 'LPAR', 'RPAR', 'OP_COMMA',
               'KW_END', 'KW_WHILE', 'KW_DO', 'KW_IF', 'KW_THEN', 'KW_ELSIF',
@@ -23,6 +24,8 @@ class ProjectParser():
         return self.built_parser.parse(tokens)
 
     def parse(self):
+        @self.pg.production('expression : ID expression')
+        
         @self.pg.production('start : input')
         def start(p):
             return Node("start", p)
@@ -37,18 +40,15 @@ class ProjectParser():
         def input(p):
             return Node("input", p)
 
-        
         @self.pg.production('expression : lhs_item')
-        @self.pg.production('expression : ID expression')
         @self.pg.production('expression : LPAR expression RPAR')
         def expr(p):
-            return Node("expr", p)
+            return ast_nodes.Expression("expr", p)
 
         @self.pg.production('expression : expression OP_MULT expression')
         @self.pg.production('expression : expression OP_DIV expression')
         @self.pg.production('expression : expression OP_PLUS expression')
         @self.pg.production('expression : expression OP_MINUS expression')
-        @self.pg.production('expression : expression OP_COMMA expression')
         @self.pg.production('bool_expression : expression OP_LESS expression')
         @self.pg.production('bool_expression : expression OP_GREATER \
             expression')
@@ -60,17 +60,24 @@ class ProjectParser():
         @self.pg.production('bool_expression : expression OP_GREATEREQUAL \
             expression')
         def binaryOp(p):
-            return ast.BinaryOperation(p[1], p[0], p[2])
+            return ast_nodes.BinaryOperation(p[1], p[0], p[2])
+
+        @self.pg.production('expression : expression OP_COMMA expression')
+        def commaOp(p):
+            return ast_nodes.CommaOperation(p[1], p[0], p[2])
 
         @self.pg.production('expression : INT_LIT')
         def integer(p):
-            return ast.Integer(p[0])
+            return ast_nodes.IntegerType(p[0])
 
         @self.pg.production('lhs_item : ID')
+        def id(p):
+            return ast_nodes.ID(p[0])
+
         @self.pg.production('lhs_item : ID OP_DOT INT_LIT')
         @self.pg.production('lhs_item : ID LBRAK expression RBRAK')
         def lhs_item(p):
-            return Node("lhs_item", p)
+            return ast_nodes.Indexed("lhs_item", p)
 
         @self.pg.production('lhs : lhs_item')
         @self.pg.production('lhs : lhs OP_COMMA lhs_item')
@@ -123,24 +130,6 @@ class ProjectParser():
         def else_statement(p):
             return Node("else_stat", p)
 
-        @self.pg.production('body : statements')
-        @self.pg.production('body : declarations')
-        @self.pg.production('body : body statements')
-        @self.pg.production('body : body declarations')
-        def body(p):
-            return Node("body", p)
-
-        @self.pg.production('definition : KW_DEFUN ID LPAR ID comma_id RPAR \
-            body KW_END KW_DEFUN')
-        def definition(p):
-            return Node("def", p)
-
-        @self.pg.production('comma_id : comma_id OP_COMMA ID')
-        @self.pg.production('comma_id : OP_COMMA ID')
-        @self.pg.production('comma_id : ')
-        def comma_id(p):
-            return Node("comma_id", p)
-
         @self.pg.production('declarations : declarations declaration')
         @self.pg.production('declarations : declaration')
         @self.pg.production('declarations : ')
@@ -163,6 +152,25 @@ class ProjectParser():
         @self.pg.production('assign : ')
         def assign(p):
             return Node("assign", p)
+
+        # For functions
+        @self.pg.production('body : statements')
+        @self.pg.production('body : declarations')
+        @self.pg.production('body : body statements')
+        @self.pg.production('body : body declarations')
+        def body(p):
+            return Node("body", p)
+
+        @self.pg.production('definition : KW_DEFUN ID LPAR ID comma_id RPAR \
+            body KW_END KW_DEFUN')
+        def definition(p):
+            return Node("def", p)
+
+        @self.pg.production('comma_id : comma_id OP_COMMA ID')
+        @self.pg.production('comma_id : OP_COMMA ID')
+        @self.pg.production('comma_id : ')
+        def comma_id(p):
+            return Node("comma_id", p)
 
         @self.pg.error
         def error_handler(token):
