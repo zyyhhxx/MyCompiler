@@ -3,6 +3,7 @@ errors = []
 declarations = []
 usage = []
 print_queue = []
+return_value = None
 
 
 def error(message):
@@ -28,16 +29,23 @@ class Scopes():
         # Try local vars first
         if len(self.scopes) > 0:
             if id.name in self.scopes[-1]:
-                return self.scopes[-1][id.name]
+                var = self.scopes[-1][id.name]
+                usage.append(("local", id.name, id.line(), type(var.value),
+                              var.line()))
+                return var
         # Global vars
         else:
             if id.name in self.globals:
-                return self.globals[id.name]
+                var = self.globals[id.name]
+                usage.append(("global", id.name, id.line(), type(var.value),
+                              var.line()))
+                return var
             else:
                 error("%s: Variable %s is not declared yet" %
                       (str(id.line()), id.name))
 
     def add_symbol_local(self, id):
+        declarations.append(("local", id.name, id.line(), type(id.value)))
         if len(self.scopes) > 0:
             self.scopes[-1][id.name] = id
         else:
@@ -45,6 +53,7 @@ class Scopes():
                   (str(id.line()), id.name))
 
     def add_symbol_global(self, id):
+        declarations.append(("global", id.name, id.line(), type(id.value)))
         if len(self.scopes) <= 0:
             self.globals[id.name] = id
         else:
@@ -497,7 +506,7 @@ class ForeachLoop  (ASTBase):
 
     def eval(self):
         scopes.push_scope()
-        counter_id = scopes.add_symbol_local(self.counter.eval())
+        counter_id = scopes.add_symbol_local()
 
         iterator = self.iterator.eval()
         target = 0
@@ -525,19 +534,34 @@ class ForeachLoop  (ASTBase):
 
 
 class IfStatement(ASTBase):
-    def __init__(self, token, value=None):
+    def __init__(self, token, condition, statements, else_statements):
         super().__init__(token)
-        self.name = token.value
-        self.value = value
+        self.condition = condition
+        self.statements = statements
+        self.else_statements = else_statements
 
     def eval(self):
-        return self.value
+        condition = self.condition.eval()
 
-    def validate(self):
-        return True
+        if type(condition) is not BoolType:
+            return
+
+        if condition.value:
+            self.statements.eval()
+        else:
+            self.else_statements.eval()
 
 
-class ID(ASTBase):
+class ElseStatement(ASTBase):
+    def __init__(self, token, statements):
+        super().__init__(token)
+        self.statements = statements
+
+    def eval(self):
+        self.statements.eval()
+
+
+class Template(ASTBase):
     def __init__(self, token, value=None):
         super().__init__(token)
         self.name = token.value

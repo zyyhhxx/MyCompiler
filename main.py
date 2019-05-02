@@ -1,7 +1,7 @@
 # Author: Yiyang Zeng yz3622
 from lexer import Lexer
 from parser import ProjectParser, Node
-from scoper import Scoper
+from ast_nodes import errors, declarations, usage, print_queue
 import os
 
 dir = os.path.realpath(
@@ -22,10 +22,22 @@ def scan_file(fname, test_name):
     tokens = scanner.input(code)
     parser = ProjectParser()
     ast = parser.input(tokens)
-    print_tree_preorder(ast)
-    # scoper = Scoper()
-    # scoper.scope(ast)
-    # print(scoper)
+    # print_tree_preorder(ast)
+    ast.eval()
+    for scope, item, line, item_type in declarations:
+        print("--------------------Declarations--------------------")
+        print("%s: declare \"%s\", %s %s" % (line, item, scope,
+                                             str(item_type)))
+    for scope, item, use_line, item_type, declared_line in usage:
+        print("--------------------Variable Usage--------------------")
+        print("%s: use \"%s\", %s %s declared on %s" %
+              (use_line, item, scope, str(item_type), declared_line))
+    for item in errors:
+        print("--------------------Errors--------------------")
+        print(item)
+    for item in print_queue:
+        print("--------------------Standard Output--------------------")
+        print(item)
 
 
 def print_tree(node, dot_num=0):

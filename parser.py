@@ -26,8 +26,9 @@ class ProjectParser():
     def parse(self):
         @self.pg.production('expression : ID expression')
         @self.pg.production('statement : RETURN expression SEMI')
-        def unknown:
-        
+        def unknown(p):
+            return Node("unknown", p)
+
         @self.pg.production('start : input')
         def start(p):
             return Node("start", p)
@@ -133,9 +134,11 @@ class ProjectParser():
             return ast_nodes.ForeachLoop(p[0], p[1], p[3], p[5])
 
         @self.pg.production('statement : KW_IF bool_expression KW_THEN statements \
-            elsif_statements else_statement KW_END KW_IF')
+            elsif_statements KW_END KW_IF')
+        @self.pg.production('elsif_statements : KW_ELSIF bool_expression KW_THEN \
+            statements elsif_statements')
         def statement(p):
-            return Node("stat", p)
+            return ast_nodes.IfStatement(p[0], p[1], p[3], p[4])
 
         @self.pg.production('statements : statement')
         @self.pg.production('statements : statements statement')
@@ -143,15 +146,14 @@ class ProjectParser():
         def statements(p):
             return Node("stats", p)
 
-        @self.pg.production('elsif_statements : KW_ELSIF bool_expression KW_THEN \
-            statements')
-        @self.pg.production('elsif_statements : elsif_statements KW_ELSIF bool_expression \
-            KW_THEN statements')
-        @self.pg.production('elsif_statements : ')
+        @self.pg.production('elsif_statements : else_statement')
         def elsif_statement(p):
-            return Node("elsif_stat", p)
+            return Node("elsif_stats", p)
 
         @self.pg.production('else_statement : KW_ELSE statements')
+        def else_stat(p):
+            return ast_nodes.ElseStatement(p[0], p[1])
+
         @self.pg.production('else_statement : ')
         def else_statement(p):
             return Node("else_stat", p)
