@@ -25,6 +25,8 @@ class ProjectParser():
 
     def parse(self):
         @self.pg.production('expression : ID expression')
+        @self.pg.production('statement : RETURN expression SEMI')
+        def unknown:
         
         @self.pg.production('start : input')
         def start(p):
@@ -40,7 +42,6 @@ class ProjectParser():
         def input(p):
             return Node("input", p)
 
-        @self.pg.production('expression : lhs_item')
         @self.pg.production('expression : LPAR expression RPAR')
         def expr(p):
             return ast_nodes.Expression("expr", p)
@@ -70,39 +71,69 @@ class ProjectParser():
         def integer(p):
             return ast_nodes.IntegerType(p[0])
 
-        @self.pg.production('lhs_item : ID')
+        @self.pg.production('expression : ID')
         def id(p):
             return ast_nodes.ID(p[0])
 
-        @self.pg.production('lhs_item : ID OP_DOT INT_LIT')
-        @self.pg.production('lhs_item : ID LBRAK expression RBRAK')
+        @self.pg.production('expression : ID OP_DOT INT_LIT')
+        @self.pg.production('expression : ID LBRAK expression RBRAK')
         def lhs_item(p):
             return ast_nodes.Indexed("lhs_item", p)
 
-        @self.pg.production('lhs : lhs_item')
-        @self.pg.production('lhs : lhs OP_COMMA lhs_item')
-        def lhs(p):
-            return Node("lhs", p)
-
         @self.pg.production('range : expression OP_DOTDOT expression')
         def range(p):
-            return Node("range", p)
+            return ast_nodes.Range(p[1], p[0], p[2])
 
-        @self.pg.production('array_id : ID')
-        def array_id(p):
-            return Node("array_id", p)
+        @self.pg.production('declarations : declarations declaration')
+        @self.pg.production('declarations : declaration')
+        @self.pg.production('declarations : ')
+        def declarations(p):
+            return Node("decls", p)
 
-        @self.pg.production('statement : lhs ASSIGN expression SEMI')
-        @self.pg.production('statement : lhs EXCHANGE lhs SEMI')
+        @self.pg.production('declaration : KW_ARRAY ID LBRAK range \
+            RBRAK assign SEMI')
+        def array_declaration(p):
+            return ast_nodes.ArrayDeclaration(p[0], p[1], p[3], p[5])
+
+        @self.pg.production('declaration : KW_LOCAL ID assign SEMI')
+        @self.pg.production('declaration : KW_GLOBAL ID assign SEMI')
+        def declaration(p):
+            return ast_nodes.Declaration(p[0], p[1], p[2])
+
+        @self.pg.production('assign : ASSIGN expression')
+        def assign(p):
+            return ast_nodes.Assign(p[0], p[1])
+
+        @self.pg.production('assign : ')
+        def assign_empty(p):
+            return Node("assign", p)
+
+        @self.pg.production('statement : expression ASSIGN expression SEMI')
+        def assign_stat(p):
+            return ast_nodes.AssignStatement(p[1], p[0], p[2])
+
+        @self.pg.production('statement : expression EXCHANGE expression SEMI')
+        def exchange_stat(p):
+            return ast_nodes.ExchangeStatement(p[1], p[0], p[2])
+
+        @self.pg.production('statement : PRINT expression SEMI')
+        def print_stat(p):
+            return ast_nodes.PrintStatement(p[0], p[1])
+
         @self.pg.production('statement : KW_WHILE bool_expression KW_DO \
             statements KW_END KW_WHILE')
-        @self.pg.production('statement : if_statement')
+        def while_loop(p):
+            return ast_nodes.WhileLoop(p[0], p[1], p[3])
+
         @self.pg.production('statement : KW_FOREACH ID KW_IN range KW_DO \
             statements KW_END KW_FOR')
-        @self.pg.production('statement : KW_FOREACH ID KW_IN array_id KW_DO \
+        @self.pg.production('statement : KW_FOREACH ID KW_IN ID KW_DO \
             statements KW_END KW_FOR')
-        @self.pg.production('statement : RETURN expression SEMI')
-        @self.pg.production('statement : PRINT expression SEMI')
+        def foreach_loop(p):
+            return ast_nodes.ForeachLoop(p[0], p[1], p[3], p[5])
+
+        @self.pg.production('statement : KW_IF bool_expression KW_THEN statements \
+            elsif_statements else_statement KW_END KW_IF')
         def statement(p):
             return Node("stat", p)
 
@@ -111,11 +142,6 @@ class ProjectParser():
         @self.pg.production('statements : ')
         def statements(p):
             return Node("stats", p)
-
-        @self.pg.production('if_statement : KW_IF bool_expression KW_THEN statements \
-            elsif_statements else_statement KW_END KW_IF')
-        def if_statement(p):
-            return Node("if_stat", p)
 
         @self.pg.production('elsif_statements : KW_ELSIF bool_expression KW_THEN \
             statements')
@@ -129,29 +155,6 @@ class ProjectParser():
         @self.pg.production('else_statement : ')
         def else_statement(p):
             return Node("else_stat", p)
-
-        @self.pg.production('declarations : declarations declaration')
-        @self.pg.production('declarations : declaration')
-        @self.pg.production('declarations : ')
-        def declarations(p):
-            return Node("decls", p)
-
-        @self.pg.production('declaration : KW_ARRAY ID LBRAK expression \
-            OP_DOTDOT expression RBRAK id_assign SEMI')
-        @self.pg.production('declaration : KW_LOCAL ID assign SEMI')
-        @self.pg.production('declaration : KW_GLOBAL ID assign SEMI')
-        def declaration(p):
-            return Node("decl", p)
-
-        @self.pg.production('id_assign : ID ASSIGN expression')
-        @self.pg.production('id_assign : ')
-        def id_assign(p):
-            return Node("id_assign", p)
-
-        @self.pg.production('assign : ASSIGN expression')
-        @self.pg.production('assign : ')
-        def assign(p):
-            return Node("assign", p)
 
         # For functions
         @self.pg.production('body : statements')
