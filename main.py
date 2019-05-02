@@ -40,24 +40,6 @@ def scan_file(fname, test_name):
         print(item)
 
 
-def print_tree(node, dot_num=0):
-    has_token = False
-    for token in node.token_list:
-        if not isinstance(token, Node):
-            has_token = True
-    for token in node.token_list:
-        if isinstance(token, Node):
-            if has_token:
-                print_tree(token, dot_num+1)
-            else:
-                print_tree(token, dot_num)
-        else:
-            # Indentation
-            for i in range(dot_num*2):
-                print('.', end='')
-            print(token.name + ":" + token.value)
-
-
 pre_tokens = ['KW_ARRAY', 'OP_DOTDOT', 'KW_TUPLE',
               'KW_LOCAL', 'KW_GLOBAL', 'KW_DEFUN', 'LPAR', 'OP_COMMA',
               'KW_ELSIF',
