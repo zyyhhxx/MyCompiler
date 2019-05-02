@@ -46,5 +46,5 @@ def scan_file(fname, test_name):
 scan_file(os.path.join(dir, "p3longtypecheck.txt"), "Piazza Sample Test 0")
 
 # Piazza Sample Test 1
-# scan_file(os.path.join(dir, "p3simplefunctionstypecheck.txt"), \
-# "Piazza Sample Test 1")
+# scan_file(os.path.join(dir, "p3simplefunctionstypecheck.txt"),
+#           "Piazza Sample Test 1")

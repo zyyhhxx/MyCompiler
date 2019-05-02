@@ -5,8 +5,9 @@ usage = []
 print_queue = []
 
 # Functions
+global return_value, return_flag
 return_value = None
-parameters = None
+return_flag = False
 
 
 def error(message):
@@ -60,6 +61,7 @@ class Scopes():
 
 
 scopes = Scopes()
+functions = Scopes()
 
 
 class ASTBase(BaseBox):
@@ -91,6 +93,9 @@ class Node(BaseBox):
     def eval(self):
         # Find all non-tokens in the list and eval it
         for item in self.token_list:
+            # If function has returned, do nothing
+            if return_flag:
+                return
             if type(item) is not Token:
                 item.eval()
 
@@ -492,7 +497,7 @@ class AssignStatement(BinaryOperation):
 
         if type(lhs.value) is not type(rhs):
             error("%s: cannot assign %s to %s" %
-                  (self.line(), str(type(lhs.value)), str(type(rhs))))
+                  (self.line(), str(type(rhs)), str(type(lhs.value))))
             return
 
         if type(lhs.value) is TupleType and type(rhs) is TupleType:
@@ -662,17 +667,131 @@ class ElseStatement(ASTBase):
         self.statements.eval()
 
 
-class Template(ASTBase):
-    def __init__(self, token, value=None):
+class CommaIdBinary(BinaryOperation):
+    def eval(self):
+        # Comma for tuple declaration
+        rhs = self.right.eval()
+        lhs = self.left.eval()
+        result_list = []
+
+        if type(lhs) is Token:
+            lhs = ID(lhs)
+
+        if type(rhs) is Token:
+            rhs = ID(rhs)
+
+        if type(rhs) is list:
+            for i in rhs:
+                result_list.append(i)
+        else:
+            result_list.append(rhs)
+
+        if type(lhs) is list:
+            for i in lhs:
+                result_list.append(i)
+        else:
+            result_list.append(lhs)
+
+        return result_list
+
+
+class CommaIdSingle(ASTBase):
+    def __init__(self, token, id):
         super().__init__(token)
-        self.name = token.value
+        self.id = id
+
+    def eval(self):
+        return ID(self.id)
+
+
+class Function(ASTBase):
+    def __init__(self, token, name, param, params, body):
+        super().__init__(token)
+        self.name = name
+        self.param = param
+        self.params = params
+        self.body = body
+        self.parameters = None
+
+    def eval(self):
+        # Get all parameters
+        params = self.params.eval()
+        if type(params) is list:
+            self.parameters = params
+            self.parameters.append(ID(self.param))
+            self.parameters.reverse()
+        elif type(params) is ID:
+            self.parameters = []
+            self.parameters.append(ID(self.param))
+            self.parameters.append(params)
+        functions.add_symbol_global(ID(self.name, self))
+
+    def call(self, params):
+        scopes.push_scope()
+
+        # Add parameters
+        for i in range(len(self.parameters)):
+            self.parameters[i].value = params.values[i]
+            scopes.add_symbol_local(self.parameters[i])
+        self.body.eval()
+
+        global return_flag
+        return_flag = False
+        scopes.pop_scope()
+
+
+class FunctionCall(ASTBase):
+    def __init__(self, token, params):
+        super().__init__(token)
+        self.params = params
+
+    def eval(self):
+        # Parse parameters
+        params = self.params.eval()
+        if params is None:
+            return
+
+        if type(params) is list:
+            for item in params:
+                if type(item) is not IntegerType:
+                    error("%s: tuple element must be integers" %
+                          (self.line()))
+                    return
+            params = TupleType(self.token, params)
+
+        elif type(params) is ID:
+            item = scopes.get_symbol(params)
+            if item is None:
+                return
+            params = item.value
+
+        if type(params) is not TupleType:
+            error("%s: function parameter must be a tuple, have %s" %
+                  (self.line(), str(type(params))))
+            return
+
+        # Find the function and check parameters
+        function_id = functions.get_symbol(ID(self.token))
+        if function_id is None:
+            return
+        if params.size != len(function_id.value.parameters):
+            error("%s: tuple size does not match parameter size" %
+                  (self.line()))
+            return
+        function_id.value.call(params)
+        return return_value
+
+
+class ReturnValue(ASTBase):
+    def __init__(self, token, value):
+        super().__init__(token)
         self.value = value
 
     def eval(self):
-        return self.value
-
-    def validate(self):
-        return True
+        global return_value, return_flag
+        return_value = self.value.eval()
+        return_flag = True
+        return
 
 
 class Template(ASTBase):

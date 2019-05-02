@@ -154,10 +154,13 @@ class ProjectParser():
             return ast_nodes.Node("else_stat", p)
 
         # For functions
-        @self.pg.production('expression : ID expression')
         @self.pg.production('statement : RETURN expression SEMI')
+        def return_value(p):
+            return ast_nodes.ReturnValue(p[0], p[1])
+
+        @self.pg.production('expression : ID expression')
         def unknown(p):
-            return ast_nodes.Node("unknown", p)
+            return ast_nodes.FunctionCall(p[0], p[1])
 
         @self.pg.production('body : statements')
         @self.pg.production('body : declarations')
@@ -169,10 +172,16 @@ class ProjectParser():
         @self.pg.production('definition : KW_DEFUN ID LPAR ID comma_id RPAR \
             body KW_END KW_DEFUN')
         def definition(p):
-            return ast_nodes.Node("def", p)
+            return ast_nodes.Function(p[0], p[1], p[3], p[4], p[6])
 
         @self.pg.production('comma_id : comma_id OP_COMMA ID')
+        def comma_id_binary(p):
+            return ast_nodes.CommaIdBinary(p[1], p[0], p[2])
+
         @self.pg.production('comma_id : OP_COMMA ID')
+        def comma_id_single(p):
+            return ast_nodes.CommaIdSingle(p[0], p[1])
+
         @self.pg.production('comma_id : ')
         def comma_id(p):
             return ast_nodes.Node("comma_id", p)
