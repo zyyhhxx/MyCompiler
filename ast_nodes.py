@@ -74,10 +74,6 @@ class ASTBase(BaseBox):
     def eval(self):
         return self.line()
 
-    def validate(self):
-        error("validate is not implememnted for ASTBase")
-        return False
-
 
 class Node(BaseBox):
     def __init__(self, name, token_list):
@@ -99,15 +95,6 @@ class Node(BaseBox):
             if type(item) is not Token:
                 item.eval()
 
-    def validate(self):
-        for item in self.token_list:
-            # Only check non token items
-            if type(item) is not Token:
-                validation_result = item.validate()
-                if not validation_result:
-                    return False
-        return True
-
     def line(self):
         for item in self.token_list:
             if type(item) is Token:
@@ -123,9 +110,6 @@ class ID(ASTBase):
 
     def eval(self):
         return self
-
-    def validate(self):
-        return True
 
 # 3 basic types + bool
 
@@ -144,9 +128,6 @@ class IntegerType(ASTBase):
     def eval(self):
         return self
 
-    def validate(self):
-        return True
-
 
 class ArrayType(ASTBase):
     def __init__(self, token, size):
@@ -162,9 +143,6 @@ class ArrayType(ASTBase):
     def eval(self):
         return self
 
-    def validate(self):
-        return True
-
 
 class TupleType(ASTBase):
     def __init__(self, token, values):
@@ -178,9 +156,6 @@ class TupleType(ASTBase):
 
     def eval(self):
         return self
-
-    def validate(self):
-        return True
 
 
 class BoolType(ASTBase):
@@ -339,13 +314,6 @@ class Indexed(Node):
                       (self.line(), str(index.value)))
                 return
             return var.values[index.value]
-
-    def validate(self):
-        # Array index
-        if len(self.token_list) == 4:
-            return self.token_list[2].validate()
-        # Tuple index
-        return True
 
 
 class Range(BinaryOperation):
@@ -802,6 +770,3 @@ class Template(ASTBase):
 
     def eval(self):
         return self.value
-
-    def validate(self):
-        return True
