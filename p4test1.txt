@@ -2,8 +2,11 @@
 print 1;
 global a = 5;
 print a;
-print (a+1);
-a = a + 1;
+
+print(a+1);
+print(a*5);
+print(a/5);
+print(a-5);
 
 if a == 5
 then print 1;

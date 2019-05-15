@@ -5,5 +5,13 @@ defun sum(a,b) *** params a and b are implicitly local
   return a+b;
 end defun
 
+defun addsum(a,b) *** params a and b are implicitly local
+  a=a+1;
+  b=b+1;
+  return a+b;
+end defun
+
 print sum(1,2); *** OK: can use THIS LINE to deduce that a,b and return value are ints
 print sum(i,i+2); *** OK
+print addsum(1,2); *** OK: can use THIS LINE to deduce that a,b and return value are ints
+print addsum(i,i+2); *** OK
