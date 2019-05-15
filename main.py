@@ -41,21 +41,26 @@ def scan_file(fname, test_name):
     print("--------------------Errors--------------------")
     for item in errors:
         print(item)
-    print("--------------------Standard Output--------------------")
-    for item in print_queue:
-        print(item)
+    # print("--------------------Standard Output--------------------")
+    # for item in print_queue:
+    #     print(item)
     print("--------------------Generating IR--------------------")
     ast.ir_eval(codegen.module, codegen.builder, codegen.printf)
     codegen.create_ir()
-    codegen.save_ir(fname[0:-4] + ".ll")
-    print("--------------------Done--------------------")
+    save_name = fname[0:-4]
+    codegen.save_ir(save_name + ".ll")
+    print("--------------------Compiling IR--------------------")
+    os.system("llc -filetype=obj %s.ll" % save_name)
+    os.system("gcc %s.o -static -o output" % save_name)
+    print("--------------------Standard Output--------------------")
+    os.system("./output")
 
 
-# Piazza Sample Test 0
-scan_file("p4test1.txt", "Sample Test 1")
+# Sample Test 1
+# scan_file("p4test1.txt", "Sample Test 1")
 
-# Piazza Sample Test 0
-scan_file("p4test2.txt", "Sample Test 2")
+# Sample Test 2
+# scan_file("p4test2.txt", "Sample Test 2")
 
-# Piazza Sample Test 1
+# Sample Test 3
 # scan_file("p4test3.txt", "Sample Test 3")

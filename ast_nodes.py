@@ -65,6 +65,9 @@ class Scopes():
 
 class IRScopes(Scopes):
     def __getitem__(self, builder, key):
+        return builder.load(self.get_item_pointer(builder, key))
+
+    def get_item_pointer(self, builder, key):
         ptr = None
         # Try local vars first
         if len(self.scopes) > 0:
@@ -73,7 +76,7 @@ class IRScopes(Scopes):
         # Global vars
         if key in self.globals:
             ptr = self.globals[key]
-        return builder.load(ptr)
+        return ptr
 
     def __setitem__(self, builder, key, value):
         ptr = None
@@ -381,7 +384,8 @@ class CommaOperation(BinaryOperation):
 class Expression(Node):
     def eval(self):
         # Find the only non-token in the list and eval it
-        return self.token_list[1].eval()
+        result = self.token_list[1].eval()
+        return result
 
     def ir_eval(self, module, builder, printf):
         # Find the only non-token in the list and eval it
@@ -416,14 +420,18 @@ class Indexed(Node):
             return var.values[index.value]
 
     def ir_eval(self, module, builder, printf):
-        var = ir_scopes.__getitem__(builder, self.token_list[0].value)
         # Index is an expression
         if type(self.token_list[2]) is not Token:
-            index = self.token_list[2].ir_eval(module, builder, printf).constant
+            index = self.token_list[2].ir_eval(module, builder, printf)
         # Index is an integer
         else:
-            index = IntegerType(self.token_list[2]).value
-        return builder.extract_value(var, index)
+            index = IntegerType(self.token_list[2])\
+                .ir_eval(module, builder, printf)
+        var_name = self.token_list[0].value
+        point_base = ir.Constant(ir.IntType(8), 0)
+        array_pointer = ir_scopes.get_item_pointer(builder, var_name)
+        new_item_address = builder.gep(array_pointer, [point_base, index])
+        return new_item_address
 
 
 class Range(BinaryOperation):
@@ -619,9 +627,12 @@ class AssignStatement(BinaryOperation):
             lhs.value = rhs
 
     def ir_eval(self, module, builder, printf):
-        lhs = self.left.name
+        lhs = self.left.ir_eval(module, builder, printf)
         rhs = self.right.ir_eval(module, builder, printf)
-        ir_scopes.__setitem__(builder, lhs, rhs)
+        if type(lhs) is ir.GEPInstr:
+            builder.store(rhs, lhs)
+        else:
+            ir_scopes.__setitem__(builder, self.left.name, rhs)
 
 
 class ExchangeStatement(BinaryOperation):
@@ -690,6 +701,8 @@ class PrintStatement(ASTBase):
 
     def ir_eval(self, module, builder, printf):
         value = self.message.ir_eval(module, builder, printf)
+        if type(value) is ir.GEPInstr:
+            value = builder.load(value)
 
         # Declare argument list
         voidptr_ty = ir.IntType(8).as_pointer()
@@ -790,8 +803,9 @@ class ForeachLoop (ASTBase):
 
         ir_scopes.push_scope()
 
-        internal_counter = 0
         array = ir_scopes.__getitem__(builder, self.iterator.value)
+        array_pointer = ir_scopes.get_item_pointer(builder,
+                                                   self.iterator.value)
         counter = ir.Constant(ir.IntType(8), 0)
         ir_scopes.add_symbol_local(builder, "counter", counter)
         target = ir.Constant(ir.IntType(8), array.type.count)
@@ -805,11 +819,12 @@ class ForeachLoop (ASTBase):
         builder.position_at_start(foreach_block)
 
         counter = ir_scopes.__getitem__(builder, "counter")
-        new_item = builder.extract_value(array, internal_counter)
+        point_base = ir.Constant(ir.IntType(8), 0)
+        new_item_address = builder.gep(array_pointer, [point_base, counter])
+        new_item = builder.load(new_item_address)
         ir_scopes.__setitem__(builder, "x", new_item)
         new_counter = builder.add(counter, ir.Constant(ir.IntType(8), 1))
         ir_scopes.__setitem__(builder, "counter", new_counter)
-        internal_counter += 1
         condition = builder.icmp_signed("<", counter, target)
 
         with builder.if_then(condition):
@@ -934,14 +949,27 @@ class Function(ASTBase):
 
     def ir_eval(self, module, builder, printf):
         # Create types
-        intType = ir.IntType()
+        intType = ir.IntType(8)
         params = len(self.parameters) * [intType]
         fnty = ir.FunctionType(intType, params)
+        func_name = self.name.value
 
         # Declare function
-        self.func = ir.Function(module, fnty, name=self.name)
-        block = self.func.append_basic_block(name=self.name+"_entry")
-        self.func_builder = ir.IRBuilder(block)
+        self.func = ir.Function(module, fnty, name=func_name)
+
+        # Function Content
+        func_entry = self.func.append_basic_block(name=func_name+"_entry")
+        func_builder = ir.IRBuilder(func_entry)
+
+        for i, arg in enumerate(self.func.args):
+            ir_scopes.add_symbol_global(func_builder,
+                                       self.parameters[i].name, arg)
+
+        retval = self.body.ir_eval(module, func_builder, printf)
+
+    def ir_call(self, module, builder, printf, params):
+        pass
+        # func_builder.ret(retval)
 
 
 class FunctionCall(ASTBase):
@@ -985,6 +1013,22 @@ class FunctionCall(ASTBase):
         function_id.value.call(params)
         return return_value
 
+    def ir_eval(self, module, builder, printf):
+        # Parse parameters
+        params = self.params.eval()
+
+        if type(params) is list:
+            params = [i.ir_eval(module, builder, printf)
+                      for i in TupleType(self.token, params).values]
+
+        elif type(params) is ID:
+            params = [ir_scopes.__getitem__(builder, params.name)]
+
+        # Find the function and check parameters
+        callee_func = module.get_global(self.token.value)
+        call_args = [arg for arg in params]
+        return builder.call(callee_func, call_args, 'calltmp')
+
 
 class ReturnValue(ASTBase):
     def __init__(self, token, value):
@@ -996,6 +1040,10 @@ class ReturnValue(ASTBase):
         return_value = self.value.eval()
         return_flag = True
         return
+
+    def ir_eval(self, module, builder, printf):
+        result = self.value.ir_eval(module, builder, printf)
+        builder.ret(result)
 
 
 class Template(ASTBase):

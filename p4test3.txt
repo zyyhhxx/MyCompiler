@@ -1,0 +1,9 @@
+***Level 3
+global i=0;
+
+defun sum(a,b) *** params a and b are implicitly local
+  return a+b;
+end defun
+
+print sum(1,2); *** OK: can use THIS LINE to deduce that a,b and return value are ints
+print sum(i,i+2); *** OK

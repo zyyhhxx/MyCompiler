@@ -1,11 +1,14 @@
 ***Level 2
-global t=2,3,4;
+global t=1,2,3;
 print t[0];
 print t[1];
 print t[2];
 
 global a;
 array a[0..2];
+a[0] = 4;
+a[1] = 5;
+a[2] = 6;
 foreach x in a do
     print x;
 end for
