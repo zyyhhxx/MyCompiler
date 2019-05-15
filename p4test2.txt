@@ -4,11 +4,11 @@ print t[0];
 print t[1];
 print t[2];
 
-global a;
-array a[0..2];
-a[0] = 4;
-a[1] = 5;
-a[2] = 6;
-foreach x in a do
+global arr;
+array arr[0..2];
+arr[0] = 4;
+arr[1] = 5;
+arr[2] = 6;
+foreach x in arr do
     print x;
 end for

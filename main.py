@@ -2,7 +2,7 @@
 from lexer import Lexer
 from parser import ProjectParser
 from codegen import CodeGen
-from ast_nodes import errors, declarations, usage, print_queue
+from ast_nodes import errors, declarations, usage
 import os
 
 dir = os.path.realpath(
@@ -54,13 +54,14 @@ def scan_file(fname, test_name):
     os.system("gcc %s.o -static -o output" % save_name)
     print("--------------------Standard Output--------------------")
     os.system("./output")
+    ast = None
 
 
 # Sample Test 1
-# scan_file("p4test1.txt", "Sample Test 1")
+scan_file("p4test1.txt", "Sample Test 1")
 
 # Sample Test 2
-# scan_file("p4test2.txt", "Sample Test 2")
+scan_file("p4test2.txt", "Sample Test 2")
 
 # Sample Test 3
-# scan_file("p4test3.txt", "Sample Test 3")
+scan_file("p4test3.txt", "Sample Test 3")

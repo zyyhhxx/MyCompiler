@@ -1,14 +1,14 @@
 ***Level 3
 global i=0;
 
-defun sum(a,b) *** params a and b are implicitly local
-  return a+b;
+defun sum(numa,numb) *** params a and b are implicitly local
+  return numa+numb;
 end defun
 
-defun addsum(a,b) *** params a and b are implicitly local
-  a=a+1;
-  b=b+1;
-  return a+b;
+defun addsum(numa,numb) *** params a and b are implicitly local
+  numa=numa+1;
+  numb=numb+1;
+  return numa+numb;
 end defun
 
 print sum(1,2); *** OK: can use THIS LINE to deduce that a,b and return value are ints
