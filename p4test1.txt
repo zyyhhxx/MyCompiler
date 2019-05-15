@@ -1,0 +1,17 @@
+***Level 1
+print 1;
+global a = 5;
+print a;
+print (a+1);
+a = a + 1;
+
+if a == 5
+then print 1;
+else print 0;
+end if
+
+global b = 0;
+while b < 5 do
+print b;
+b = b + 1;
+end while

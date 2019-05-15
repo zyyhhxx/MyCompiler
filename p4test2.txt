@@ -1,0 +1,11 @@
+***Level 2
+global t=2,3,4;
+print t[0];
+print t[1];
+print t[2];
+
+global a;
+array a[0..2];
+foreach x in a do
+    print x;
+end for
