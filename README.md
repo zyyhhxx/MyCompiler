@@ -65,7 +65,7 @@ decl = ARRAY ID LBRAK expr DOTDOT expr RBRAK ( ID "=" expr )? SEMI //XXX
      | LOCAL ID ("=" expr)? SEMI //XXX init ALSO optional
      | GLOBAL ID ("=" expr)? SEMI //XXX init optional
 
-// function definition; no way to specify types of parameters (yet?)
+// function definition; no way to specify types of parameters
 def = DEFUN ID LPAR ID ( COMMA ID )* RPAR body END DEFUN
 
 body = ( statement | decl )* // no nested function definitions
@@ -80,10 +80,8 @@ statement = lhs "=" expr SEMI  // assignment
 	  | RETURN expr SEMI
 	  | PRINT expr SEMI
 
-// New. Forgot to define it.
 array-id = ID 
 
-// New. Forgot to define it.
 range = expr DOTDOT expr // XXX
 
 bool-expr = expr bool-op expr 
