@@ -1,60 +1,53 @@
 # MyCompiler
 A compiler for a custom language
-How to build this project?
+
+# How to build and run this project
 1. Install python3
 2. Install rply: pip3 install rply
 3. Run main.py
 
-Current (as of April 1) grammar for the project language.
-I removed all extensions/options/most comments, just to leave the grammar you can refer to.
+# Custom Language
+**UPPERCASE WORDS are terminals**
 
-"XXXX" marks places that we changed from the original grammar; I hope I got them all.
-=====
-Notation:
-UPPERCASE WORDS are terminals
-"+" etc are also some simple terminals, usually operators
-lower-case-words are non-terminals
+"+" etc are also some simple terminals, usually operators.  
+lower-case-words are non-terminals.  
+This grammar uses the EBNF notation:  
+| -- means alternative.  
+( ) -- means grouping.  
+? after an item  means it is optional.  
++ after an item  means "one or more of".  
+* means "zero or more of".  
 
-I use the EBNF notation:
-| -- means alternative;
-parentheses ( ) -- are used for grouping,
-? after an item  means it is optional
-+ after an item  means "one or more of" and
-* means "zero or more of".
+# Terminals  
+ARRAY: "array"  
+ID: identifier  
+DOTDOT: ".."  
+LBRAK: "["  
+RBRAK: "]"  
+SEMI: ";"  
+TUPLE: "tuple"  
+LOCAL: "local"  
+GLOBAL: "global"  
+DEFUN: "defun"  
+LPAR: "("  
+RPAR: ")"  
+COMMA: ","  
+END: "end"  
+WHILE: "while"  
+DO: "do"  
+IF: "if"  
+THEN: "then"  
+ELSIF: "elsif"  
+ELSE: "else"  
+FOREACH: "foreach"  
+FOR: "for"  
+IN: "in"  
+DOT: "."  
+INT: integer literal  
+RETURN: "return"  
+PRINT: "print"  
 
-I used C++-style //... comments to, well, comment on some parts of the grammar.  They are not part of the grammar itself.
-
-Terminals (besides the operators in quotes):
-
-ARRAY: "array"
-ID: identifier, defined below
-DOTDOT: ".."
-LBRAK: "["
-RBRAK: "]"
-SEMI: ";"
-TUPLE: "tuple"
-LOCAL: "local"
-GLOBAL: "global"
-DEFUN: "defun"
-LPAR: "("
-RPAR: ")"
-COMMA: ","
-END: "end"
-WHILE: "while"
-DO: "do"
-IF: "if"
-THEN: "then"
-ELSIF: "elsif"
-ELSE: "else"
-FOREACH: "foreach"
-FOR: "for"
-IN: "in"
-DOT: "."
-INT: integer literal, defined below
-RETURN: "return"
-PRINT: "print"
-
-Grammar:
+# Grammar
 
 start symbol: input
 
