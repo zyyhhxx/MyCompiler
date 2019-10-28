@@ -81,17 +81,17 @@ bool-op = "<" | ">" | "==" | "!=" | "<=" | ">="
 lhs =  lhs-item ( COMMA lhs-item )*  
 
 lhs-item =  
-    | ID // variable  
-    | ID DOT INT  // tuple component reference  
-    | ID LBRAK expr RBRAK // array element reference  
+    | ID  
+    | ID DOT INT  
+    | ID LBRAK expr RBRAK  
     
 expr =  
-    | expr COMMA expr // tuple constuctor  
+    | expr COMMA expr  
     | expr ( "+" | "-" ) expr  
     | expr ( "\*" | "/" ) expr  
     | LPAR expr RPAR  
     | ID  
-    | ID expr // function call, right-associative  
-    | ID DOT INT // tuple reference  
+    | ID expr  
+    | ID DOT INT  
     | ID LBRAK expr RBRAK  
     | INT
