@@ -15,8 +15,8 @@ This grammar uses the EBNF notation:
 | -- means alternative.  
 ( ) -- means grouping.  
 ? after an item  means it is optional.  
-+ after an item  means "one or more of".  
-* means "zero or more of".  
+\+ after an item  means "one or more of".  
+\* means "zero or more of".  
 
 # Terminals  
 ARRAY: "array"  
@@ -49,55 +49,49 @@ PRINT: "print"
 
 # Grammar
 
-start symbol: input
+start symbol: input  
+input = ( statement | decl | defn )*  
 
-input = ( statement | decl | defn )*
+decl = ARRAY ID LBRAK expr DOTDOT expr RBRAK ( ID "=" expr )? SEMI  
+| LOCAL ID ("=" expr)? SEMI  
+| GLOBAL ID ("=" expr)? SEMI  
 
-decl = ARRAY ID LBRAK expr DOTDOT expr RBRAK ( ID "=" expr )? SEMI //XXX
-     // XXX no more "tuple declarations", this is gone: | TUPLE ID "=" expr ( COMMA expr)+ SEMI
-     | LOCAL ID ("=" expr)? SEMI //XXX init ALSO optional
-     | GLOBAL ID ("=" expr)? SEMI //XXX init optional
+def = DEFUN ID LPAR ID ( COMMA ID )* RPAR body END DEFUN  
 
-// function definition; no way to specify types of parameters
-def = DEFUN ID LPAR ID ( COMMA ID )* RPAR body END DEFUN
+body = ( statement | decl )*  
 
-body = ( statement | decl )* // no nested function definitions
+statement = lhs "=" expr SEMI  
+          | lhs "<->" lhs SEMI  
+	  | WHILE bool-expr  DO statement* END WHILE  
+	  | IF bool-expr THEN statement*  
+	    (ELSIF bool-expr THEN statement*)*  
+	    (ELSE statement*)? END IF  
+	  | FOREACH ID IN (range | array-id) DO statement* END FOR  
+	  | RETURN expr SEMI  
+	  | PRINT expr SEMI  
+	  
+array-id = ID  
 
-statement = lhs "=" expr SEMI  // assignment
-          | lhs "<->" lhs SEMI // exchange
-	  | WHILE bool-expr  DO statement* END WHILE
-	  | IF bool-expr THEN statement*
-	    (ELSIF bool-expr THEN statement*)*  // XXX any number of statements allowed
-	    (ELSE statement*)? END IF  // XXX any number of statements allowed
-	  | FOREACH ID IN (range | array-id) DO statement* END FOR
-	  | RETURN expr SEMI
-	  | PRINT expr SEMI
+range = expr DOTDOT expr  
 
-array-id = ID 
+bool-expr = expr bool-op expr  
 
-range = expr DOTDOT expr // XXX
+bool-op = "<" | ">" | "==" | "!=" | "<=" | ">="  
 
-bool-expr = expr bool-op expr 
+lhs =  lhs-item ( COMMA lhs-item )*  
 
-bool-op = "<" | ">" | "==" | "!=" | "<=" | ">="
-
-// left hand side of an assignment
-lhs =  lhs-item ( COMMA lhs-item )*
-
-lhs-item =
-    | ID // variable
-    | ID DOT INT  // tuple component reference
-    | ID LBRAK expr RBRAK // array element reference
-
-expr = // XXX *ascending* order of precedence: from least important to most important
-    | expr COMMA expr // tuple constuctor
-    | expr ( "+" | "-" ) expr
-    | expr ( "*" | "/" ) expr
-    // XXX there is no more unary minus!!
-    | LPAR expr RPAR
-    | ID
-    | ID expr // function call, right-associative
-    | ID DOT INT // tuple reference
-    | ID LBRAK expr RBRAK // array element reference
-    // XXX this was missing!
+lhs-item =  
+    | ID // variable  
+    | ID DOT INT  // tuple component reference  
+    | ID LBRAK expr RBRAK // array element reference  
+    
+expr =  
+    | expr COMMA expr // tuple constuctor  
+    | expr ( "+" | "-" ) expr  
+    | expr ( "\*" | "/" ) expr  
+    | LPAR expr RPAR  
+    | ID  
+    | ID expr // function call, right-associative  
+    | ID DOT INT // tuple reference  
+    | ID LBRAK expr RBRAK  
     | INT
