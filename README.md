@@ -1,12 +1,12 @@
 # MyCompiler
 A compiler for a custom language
 
-# How to build and run this project
+## How to build and run this project
 1. Install python3
 2. Install rply: pip3 install rply
 3. Run main.py
 
-# Custom Language
+## Custom Language
 **UPPERCASE WORDS are terminals**
 
 "+" etc are also some simple terminals, usually operators.  
@@ -18,7 +18,7 @@ This grammar uses the EBNF notation:
 \+ after an item  means "one or more of".  
 \* means "zero or more of".  
 
-# Terminals  
+### Terminals  
 ARRAY: "array"  
 ID: identifier  
 DOTDOT: ".."  
@@ -47,7 +47,7 @@ INT: integer literal
 RETURN: "return"  
 PRINT: "print"  
 
-# Grammar
+### Grammar
 
 start symbol: input  
 input = ( statement | decl | defn )*  
