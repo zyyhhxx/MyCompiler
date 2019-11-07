@@ -2,7 +2,7 @@
 A compiler for a custom language
 
 ## How to build and run this project
-1. Install python3
+1. Install python3, llc and gcc
 2. Install rply: `pip3 install rply`
 3. Run main.py
 
