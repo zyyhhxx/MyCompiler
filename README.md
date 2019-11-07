@@ -19,33 +19,35 @@ This grammar uses the EBNF notation:
 \* means "zero or more of".  
 
 ### Terminals  
-ARRAY: "array"  
-ID: identifier  
-DOTDOT: ".."  
-LBRAK: "["  
-RBRAK: "]"  
-SEMI: ";"  
-TUPLE: "tuple"  
-LOCAL: "local"  
-GLOBAL: "global"  
-DEFUN: "defun"  
-LPAR: "("  
-RPAR: ")"  
-COMMA: ","  
-END: "end"  
-WHILE: "while"  
-DO: "do"  
-IF: "if"  
-THEN: "then"  
-ELSIF: "elsif"  
-ELSE: "else"  
-FOREACH: "foreach"  
-FOR: "for"  
-IN: "in"  
-DOT: "."  
-INT: integer literal  
-RETURN: "return"  
-PRINT: "print"  
+|Terminal|Token|
+|---------|------------|
+|ARRAY| "array"|  
+|ID|identifier|  
+|DOTDOT|".."|  
+|LBRAK|"["|  
+|RBRAK|"]"|  
+|SEMI|";"|
+|TUPLE|"tuple"|  
+|LOCAL|"local"|
+|GLOBAL|"global"|  
+|DEFUN|"defun"|  
+|LPAR|"("|  
+|RPAR|")"|  
+|COMMA|","|  
+|END|"end"|  
+|WHILE|"while"|  
+|DO|"do"|  
+|IF|"if"|  
+|THEN|"then"|  
+|ELSIF|"elsif"|  
+|ELSE|"else"|  
+|FOREACH|"foreach"|  
+|FOR|"for"|  
+|IN|"in"|  
+|DOT|"."|  
+|INT|integer literal|  
+|RETURN|"return"|  
+|PRINT|"print"|  
 
 ### Grammar
 
